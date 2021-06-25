@@ -2,7 +2,7 @@
 These components are the code snippets that can be attached to entities for some actual effect.
 
 ##  vem-controller
-A series of commands used to interact with objects in a scene.
+A dictionary of commands used to interact with objects in a scene. The VEM controller also sends the manager's id with each call. VEM controllers require a parent with the "id" variable. 
 
 *NOTE: On the backend, VEM commands are just function triggers for the components in the scene.*
 
@@ -17,13 +17,16 @@ A series of commands used to interact with objects in a scene.
 #### Dependencies
 
 #### VEM Commands
-| Command | Reciever | Description |
---- | --- | --- 
-glide(x, y, z, time, useRelative=false) | rigging | Moves all riggings to a space x, y, z (floats) over a certain period of time.
-playNote(instrument, note, length)
-playSequence(instrument, sequence)
-playSong(url, fadeIn=0)
-stopSong(url, fadeOut=0)
+| Command                              | Arguments                                                    | Description                                                  |
+| ------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| glide(x, y, z, time, relative)       | __x (float)__ x-position in 3D space to glide to<br/>__y (float)__ y-position in 3D space to glide to<br/>__z (float)__ y-position in 3D space to glide to<br/>__time (int)__ time in ms that the object will be in motion<br/>__mode (int)__ how the 3D target position is treated | Mode can be either 0 (global coordinates),1 (coordinates relative to the manager), or 2 (coordinates relative to the object). Calls {insert command here} in all riggings with a matching id. |
+| modify(...)                          |                                                              |                                                              |
+| sound(frequency, duration)           | __frequency (int)__ frequency of the note to play<br/>__duration (int)__ the amount of time in ms that the note should play | Plays a single note for a specified duration. Valid instruments are {insert valid instruments here}. Calls {insert command here} in all sound-makers with a matching id (including this one). |
+| melody(frequencies, durations)       | __melody (string)__ a comma deliminated sequence of note frequencies<br/>__instrument (string)__ a comma deliminated sequence of of note durations | Calls {insert command here} in all sound-makers with a matching id (including this one). |
+| note(key, duration, instrument)      |                                                              |                                                              |
+| melody(notes, durations, instrument) |                                                              |                                                              |
+| play(url, in, out)                   | __url (string)__ a url pointing to a valid audio file<br/>__in (int)__ the amount of time in ms that the audio should fade in<br/>__out (int)__ the amount of time in ms that the audio should fade in | Calls {insert command here} in all sound-makers with a matching id (including this one). |
+
 
 ## osc-manager
 Recieves OSC commands, parses them, and sends them to relevant objects in the scene. Maps OSC commands to VEM commands.
@@ -32,32 +35,42 @@ Recieves OSC commands, parses them, and sends them to relevant objects in the sc
 
 #### Value
 | Property | Description | Default |
---- | --- | ---
+--- | --- | --- | --- | --- 
 | serverIP |  | 127.0.0.1 |
 | serverPort |  | 3333 |
 | clientIP |  | 127.0.0.1 |
 | clientPort |  | 3334 |
-| outputID |  | 0 |
+| id |  | 0 |
 
 #### Dependencies
 * VEM/vem-controller
 
 #### OSC Commands
 
+| OSC Command                              | Arguments | VEM Command                         |
+| ---------------------------------------- | --------- | ----------------------------------- |
+| /spawn/particle/\<name>                  | ,fff      |                                     |
+| /spawn/object/\<name>                    | ,fff      |                                     |
+| /animation/transition                    | ,s        |                                     |
+| /rigging/glide                           | ,fffii    | glide(x, y, z, time, relative)      |
+| /synthesizer/frequency                   | ,fi       | sound(frequency, duration)          |
+| /synthesizer/frequency/sequence          | ,ss       | ssound(frequencies, durations)      |
+| /synthesizer/play                        | ,sii      | play(url, in, out)                  |
+| /synthesizer/note/\<instrument>          | ,si       | note(instrument, key, duration)     |
+| /synthesizer/note/\<instrument>/sequence | ,sss      | melody(instrument, keys, durations) |
+
 ## input-manager
-Maps various user-specifified (but prebuilt) inputs to VEM commands.
+Maps various user-specified (but prebuilt) inputs to VEM commands.
 #### Example
 	// this is example code!
 
 #### Value
-| Property | Description | Default |
---- | --- | ---
-| outputID |  | 0 |
+ Property | Description | Default 
+ --- | --- | --- 
+ id |  | 0 
 
 #### Dependencies
 * VEM/vem-controller
-
-#### OSC Commands
 
 
 ## rigging
@@ -69,10 +82,10 @@ Allows for an object\'s position to be moved based on VEM commands.
 	// this is example code!
 
 #### Value
-| Property | Description | Default |
---- | --- | ---
-| queueChanges | Whether the position changes are queued or instantly overwrite the current motion | true |
-| inputID |  | 0 |
+ Property | Description | Default 
+ --- | --- | --- 
+ queueChanges | Whether the position changes are queued or instantly overwrite the current motion | true 
+ id |  | 0 
 
 #### Dependencies
 * core/Animation
@@ -86,22 +99,25 @@ allows for models to be changed based on osc inputs. Controlled via VEM commands
 
 #### Value
 | Property | Description | Default |
---- | --- | ---
+--- | --- | --- | --- | --- 
 | queueChanges | Whether the animation changes are queued or instantly overwrite the current animation | true |
-| inputID |  | 0 |
+| id |  | 0 |
 
 #### Dependencies
 * core/Animations
 
 ## audio-stream
 An output for localized sound in 3D space. Requires a connected manager to play sound. 
+
+*NOTE: this would require Three.js to be able to play a sound in multiple locations at once, which might not be possible. An alternative would be to replace audio-stream with a sound-maker component.*
+
 #### Example
 	// this is example code!
 
 #### Value
 | Property | Description | Default |
---- | --- | ---
-| inputID |  | 0 |
+--- | --- | --- | --- | --- 
+| id |  | 0 |
 
 #### Dependencies
 * core/sound ?
@@ -114,8 +130,8 @@ Spawns new particles into the world space
 
 #### Value
 | Property | Description | Default |
---- | --- | ---
-| inputID |  | 0 |
+--- | --- | --- | --- | --- 
+| id |  | 0 |
 
 #### Dependencies
 * IdeaSpaceVR/aframe-particle-system-component
@@ -128,7 +144,7 @@ Spawns new 3D models into the world space
 
 #### Value
 | Property | Description | Default |
---- | --- | ---
-| inputID |  | 0 |
+--- | --- | --- | --- | --- 
+| id |  | 0 |
 
 #### Dependencies
