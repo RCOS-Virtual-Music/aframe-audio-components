@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kitchen</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script
+      src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.0.2/dist/aframe-extras.min.js"></script>
+    <script src="./radio-audio-toggle.js"></script>
+
+  </head>
+
+  <body>
+    <!--Adding equally loud ambient environmental noise directly to background, since we're working with one room-->
+    <a-scene light="defaultLightsEnabled: false" sound="src: url(./assets/audio/room_tone.wav); loop: true; autoplay: true; volume: 1.5; positional: false ">
+   
+      <!-- Assets -->
+      <a-assets>
+        <!-- Audio Assets -->
+        <audio id="espressoMachine" src="./assets/audio/espresso_machine.mp3"></audio>
+        <audio id="toaster" src="./assets/audio/toaster.mp3"></audio>
+        <audio id="bottle" src="./assets/audio/bottle.mp3"></audio>
+        <audio id="music" src="./assets/audio/mellow_bossa.mp3"></audio>
+        <audio id="fryingEgg" src="./assets/audio/frying_egg.mp3"></audio>
+
+
+        <!-- Models, from Google Poly -->
+        <a-asset-item id="kitchen" src="/assets/models/kitchen/model.gltf"></a-asset-item>
+        <a-asset-item id="coffeeMaker"
+          src="/assets/models/coffee/nespresso_vertuo_plus.gltf"></a-asset-item>
+        <a-asset-item id="emptyMug" src="/assets/models/mug/Mug.gltf"></a-asset-item>
+        <a-asset-item id="plate" src="/assets/models/plate/Dish.gltf"></a-asset-item>
+        <a-asset-item id="toast" src="/assets/models/toast/model.gltf"></a-asset-item>
+        <a-asset-item id="pan" src="/assets/models/pan/model.gltf"></a-asset-item>
+        <a-asset-item id="egg" src="/assets/models/egg/eggSunnysideUp.gltf"></a-asset-item>
+        <a-asset-item id="radio" src="/assets/models/radio/model.gltf"></a-asset-item>
+      </a-assets>
+
+
+      <!-- Lights -->
+      <a-entity light="type: ambient; color: #CCC"></a-entity>
+      <a-entity light="type: directional; color: #EEE; intensity: 0.5"
+        position="-1 1 0"></a-entity>
+      <a-entity light="color:#EEE;intensity:0.5" position="3.2 3.3 -0.2"
+        rotation="0 -26.3 0"></a-entity>
+
+
+
+      <!-- KITCHEN MODEL -->
+      <a-entity gltf-model="#kitchen" position="-2.6 0.5 -2.5" rotation="0 141
+        0">
+        <a-entity
+          gltf-model="#coffeeMaker" sound="src: #espressoMachine; volume: 1; on: click; autoplay: false; loop: false;" position="-1.9684428347397913
+          0.6611165318954533 1.0480361652323253" rotation="0 180 0"
+          scale="0.8 0.8 0.8"></a-entity>
+
+        <a-entity gltf-model="#emptyMug" position="-1.9 0.7 0.9" rotation="0 55
+          0" scale="0.75 0.75 0.75"></a-entity>
+        <!--Attaching audio handler component as the last attribute so that sound plays correctly-->
+        <a-entity sound="src: #music; volume: 1; loop: true;" gltf-model="#radio" 
+          position="-2.210357318137207 0.3718644106385657 1.1893210652598343" 
+          rotation="0 45 0" scale="0.3 0.3 0.3" radio-audio-toggle="playing: false"></a-entity>
+
+        <a-entity gltf-model="#plate" position="-2.324908935706603
+          0.6607899348542932 1.4208847524749022" scale="0.25 0.25 0.25"></a-entity>
+       
+          <a-entity gltf-model="#toast" position="-2.355316493011995
+          0.7161907695660004 1.617143421798886"
+          rotation="-90 0 0" scale="0.1 0.1 0.1"></a-entity>
+        
+        <a-entity gltf-model="#toast" position="-2.32 0.728 1.617143421798886"
+          rotation="-90 0 0" scale="0.1 0.1 0.1"></a-entity>
+
+        <a-entity gltf-model="#pan" position="-2.7954648137092604
+          0.3479408442703882 1.3724892368539716"
+          rotation="0 90 0" scale="0.15 0.15 0.15"></a-entity>
+
+        <a-entity gltf-model="#egg" sound="src: #fryingEgg; volume: 1; on: click"
+          position="-2.9991899674434763 0.7066393732063021 1.3617704499187389"
+          scale="0.025 0.025 0.025"></a-entity>
+        <!-- A-Sound primitive - attaching clickable geometry, using for the toaster sound-->
+        <a-sound material="opacity: 0" src= "src: url(./assets/audio/toaster.mp3)" geometry="primitive: box" position="-2.5 0.728 1.617143421798886" on="click" volume="1.25" ></a-sound>
+
+          <!-- Geometry primiitive - attaching sound to it, using for the bottle sound-->
+        <a-cylinder sound="src: #bottle; volume: 1; on: click" material="opacity:0" position="-3.17 0.818 1.520"
+        scale="0.036 0.460 0.069" ></a-cylinder> 
+
+      </a-entity>
+      <!-- END KITCHEN MODEL -->
+
+
+
+      <a-entity id="rig" movement-controls position="0 0 0">
+        <!-- Camera -->
+        <a-entity camera position="0 1.5 0" look-controls="pointerLockEnabled:
+          true">
+
+
+          <!-- Cursor -->
+          <a-entity cursor raycaster="far: .5" position="0 0 -0.3"
+            geometry="primitive: ring; radiusInner: 0.003; radiusOuter: 0.005"
+            material="color: #EE6C15">
+          </a-entity>
+        </a-entity>
+
+      </a-entity>
+
+    </a-scene>
+
+  </body>
+
+</html>
