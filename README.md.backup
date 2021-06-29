@@ -1,1 +1,0 @@
-# aframe-audio-components
