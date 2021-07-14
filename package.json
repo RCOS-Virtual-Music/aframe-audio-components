@@ -1,0 +1,29 @@
+{
+	"name": "aframe-audio-components",
+	"description": "Audio Components For A-Frame",
+	"version": "0.0.1",
+	"author": {
+		"name": "VEM",
+		"email": "VEM@void.cc"
+	},
+	"contributors": [
+		{
+			"name": "Dru Ellering",
+			"email": "druellering@gmail.com"
+		}
+	],
+	"dependencies": {
+		"cors": "^2.8.5",
+		"node-osc": "^6.0.3",
+		"socket.io": "^4.1.3"
+	},
+	"keywords": [
+		"osc",
+		"vr",
+		"music"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/RCOS-Virtual-Music/aframe-audio-components.git"
+	}
+}
