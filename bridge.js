@@ -1,17 +1,3 @@
-// To run: node bridge.js
-// first run in this directory:
-// `npm install socket.io@4`
-// `npm install node-osc@6`
-
-// NOTE:
-// As of node-osc 6.0.3, npm i node-osc does not properly install
-// FIX:
-// `cd ./node_modules/node-osc/`
-// `npm i rollup`
-// `npm run-script build`
-// `cd ..`
-// `cd ..`
-
 // Sockets
 var serverPort = 8081;
 var osc = require('node-osc')
@@ -25,7 +11,6 @@ io.on('connection', socket => {
 		console.log(`Sucessful connection from ${obj.web.host}:${obj.web.port}`);
 		// Connect this Web Client to the OSC Client it requests
 		this.webOn = new osc.Server(obj.osc.listen, obj.web.host);
-		this.webSend = new osc.Client(obj.web.host, obj.web.port);
 		this.oscOn = new osc.Server(obj.osc.listen, obj.osc.host);
 		this.oscSend = new osc.Client(obj.osc.host, obj.osc.recieve);
 		server = this;
