@@ -13,6 +13,7 @@
 		}
 	],
 	"dependencies": {
+		"cors": "^2.8.5",
 		"node-osc": "^6.0.3",
 		"socket.io": "^4.1.3"
 	},

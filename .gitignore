@@ -5,8 +5,10 @@ node_modules/
 logs
 *.log
 
+# Ignore old files
+*.old
 
-# The file containing environment variables 
+# The file containing environment variables
 .env
 
 # Ignore IDE specific files
