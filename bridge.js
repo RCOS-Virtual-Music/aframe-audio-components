@@ -8,13 +8,17 @@ io.on('connection', socket => {
 	console.log('New connection attempted...');
 	// On Web Client connection sucess (config)
 	socket.on('config', function(obj) {
-		console.log(`Sucessful connection from ${obj.web.host}:${obj.web.port}`);
+		// Auto detect browser IP
+		let webHost = socket.conn.remoteAddress.slice(7)
+		// Log the connections
+		console.log(`Sucessful connection from ${webHost}:${obj.port.listen}`);
 		// Connect this Web Client to the OSC Client it requests
-		this.webOn = new osc.Server(obj.osc.listen, obj.web.host);
-		this.oscOn = new osc.Server(obj.osc.listen, obj.osc.host);
-		this.oscSend = new osc.Client(obj.osc.host, obj.osc.recieve);
+		this.webOn = new osc.Server(obj.port.listen, webHost);
+		this.oscOn = new osc.Server(obj.port.listen, obj.host);
+		this.oscSend = new osc.Client(obj.host, obj.port.recieve);
 		server = this;
 		// Send messages to the OSC Client
+
 		this.webOn.on('message', function(msg) {
 			socket.emit('message', msg);
 			console.log('sent Web Client message to OSC Client', msg);
@@ -38,7 +42,7 @@ io.on('connection', socket => {
 	// When the Web Client disconnects
 	socket.on("disconnect", function () {
 		console.log('Web Client disconnected');
-		this.webOn.close();
+		//this.webOn.close();
 		this.oscOn.close();
 	})
 });
