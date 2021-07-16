@@ -1,17 +1,3 @@
-// To run: node bridge.js
-// first run in this directory:
-// `npm install socket.io@4`
-// `npm install node-osc@6`
-
-// NOTE:
-// As of node-osc 6.0.3, npm i node-osc does not properly install
-// FIX:
-// `cd ./node_modules/node-osc/`
-// `npm i rollup`
-// `npm run-script build`
-// `cd ..`
-// `cd ..`
-
 // Sockets
 var serverPort = 8081;
 var osc = require('node-osc')
@@ -22,12 +8,14 @@ io.on('connection', socket => {
 	console.log('New connection attempted...');
 	// On Web Client connection sucess (config)
 	socket.on('config', function(obj) {
-		console.log(`Sucessful connection from ${obj.web.host}:${obj.web.port}`);
+		// Auto detect browser IP
+		let webHost = socket.conn.remoteAddress.slice(7)
+		// Log the connections
+		console.log(`Sucessful connection from ${webHost}:${obj.port.listen}`);
 		// Connect this Web Client to the OSC Client it requests
-		this.webOn = new osc.Server(obj.osc.listen, obj.web.host);
-		this.webSend = new osc.Client(obj.web.host, obj.web.port);
-		this.oscOn = new osc.Server(obj.osc.listen, obj.osc.host);
-		this.oscSend = new osc.Client(obj.osc.host, obj.osc.recieve);
+		this.webOn = new osc.Server(obj.port.listen, webHost);
+		this.oscOn = new osc.Server(obj.port.listen, obj.host);
+		this.oscSend = new osc.Client(obj.host, obj.port.recieve);
 		server = this;
 		// Send messages to the OSC Client
 		this.webOn.on('message', function(msg) {
@@ -53,7 +41,7 @@ io.on('connection', socket => {
 	// When the Web Client disconnects
 	socket.on("disconnect", function () {
 		console.log('Web Client disconnected');
-		this.webOn.close();
+		//this.webOn.close();
 		this.oscOn.close();
 	})
 });
