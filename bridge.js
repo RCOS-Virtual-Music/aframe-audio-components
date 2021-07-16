@@ -18,7 +18,6 @@ io.on('connection', socket => {
 		this.oscSend = new osc.Client(obj.host, obj.port.recieve);
 		server = this;
 		// Send messages to the OSC Client
-
 		this.webOn.on('message', function(msg) {
 			socket.emit('message', msg);
 			console.log('sent Web Client message to OSC Client', msg);
