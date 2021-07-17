@@ -36,12 +36,9 @@ io.on('connection', socket => {
 		var msg = obj.split(' ');
 		console.log('sent Web Client message to OSC Client', msg);
 		this.oscSend.send(...msg);
-
 	});
 	// When the Web Client disconnects
 	socket.on("disconnect", function () {
 		console.log('Web Client disconnected');
-		//this.webOn.close();
-		this.oscOn.close();
 	})
 });
