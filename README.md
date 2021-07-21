@@ -4,7 +4,7 @@ Ready-to-use component and entities for a A-Frame WebVR framework that allows fo
 
 ## Getting Started
 
-Whether you want to contribute or simply use these components for your own personal use, the [Quick Start Guide](#quick-start-guide) will help you get set up. 
+Whether you want to contribute or simply use these components for your own personal use, the [Quick Start](#quick-start) guide will help you get set up. 
 
 
 ### Quick Start
@@ -16,40 +16,9 @@ git clone https://github.com/RCOS-Virtual-Music/aframe-audio-components.git
 cd aframe-audio-components
 ```
 
-#### Launching the Web Client (Python)
+#### Launching the Web Client (Browser)
 
-To get started, make sure you have the following installed: <br/>
-
-* Python 3.0 (you can download it [here](www.python.org/downloads/))
-
-Using your terminal, navigate to the `aframe-audio-components/` directory. To launch the web client, simply run `python -m http.server 8000`. This launches the server on your localhost on port 8000 (default). Open [http://localhost:8000/](http://localhost:8000/) on any browser of your choosing and you should see the boilerplate scene. 
-
-#### Launching the Web Client (npm live-server)
-To get started, make sure you have the following installed:
- <br/>
-
-* Node, npm (follow instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
-
-1. In your terminal, cd into directory of the HTML file for the A-Frame scene: the  `aframe-audio-components/` directory.
-2. In the terminal, run `npm install -g live-server && live-server`
-3. A browser window should automatically be launched with the server. Otherwise, navigate to the server address outputted in the terminal.
-
-In the future, now that live-server has been installed, you should be able to run `live-server` in the same directory as the HTML file in your terminal to launch the scene.
-
-#### Launching the Web Client (VS Code Live Server)
-Live Server is a VS Code extension that allows you to launch a local development Server with live reload feature for static & dynamic pages.
-These instructions are for starting and running a server *if* you have a HTML file for your project. 
-
-For serverside code such as `PHP`, `.NET` or `NodeJS` files, you will need to host your own server and additionally download the Live Server browser extension following [these instructions]():
-
-1. Install [VS Code, a text editor from Microsoft](https://code.visualstudio.com/download). <sup>(code editor)</sup>
-2. Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer). <sup>(extension to code editor)</sup>
-3. Open up a project in VS Code.
-4. At the bottom right handside of the status bar, there should be a button to `Go Live.` Click to turn this server on/off.
-5. Right click on a `HTML` file from the Explorer window and click on `Open with Live Server.`
-
-This should automatically open up the scene in a browser window.
-
+Locate the `index.html` file in your `aframe-audio-components/` folder and launch it in a web browser of your choice. If you are working on contributing to the package, you might want to look at using one of the [other methods](https://github.com/RCOS-Virtual-Music/aframe-audio-components/tree/documentation/documentation/launching-the-web-client.md) of launching the web client. 
 
 #### Launching the Bridge Server
 When using these components for OSC communication, a bridge server is needed to pipe data from your local OSC application to a client's web browser. In order to host this bridge server on your local machine, make sure you have the following installed:
@@ -58,9 +27,8 @@ When using these components for OSC communication, a bridge server is needed to 
 
 Once npm is installed, you will need to navigate to the `aframe-audio-components/` folder and run the following commands:
 
-```
-npm install node-osc
-npm install socket.io
+```txt
+npm install node-osc@6.0.2
 node bridge.js
 ```
 
@@ -81,9 +49,36 @@ hosting the OSC client, then this is IP will be your OSC host. Once you have fou
 ...
 <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" osc-manager="oscHost: <OSC-Host>; bridgeHost: <Bridge-Host>"></a-cylinder>
 ```
+### Running OSC Commands
 
+Once you have set up the web client, bridge server, and OSC client, you should be able to send OSC commands from your OSC client to any connected browsers. A non-exauhstive list of OSC commands can be found [here](https://github.com/RCOS-Virtual-Music/aframe-audio-components/tree/documentation/documentation/osc-commands.md).
 
+## Development
 
+#### Integration
 
-## References 
+If you would like to figure out how to integrate new components into the audio components library, it is reccomended to look at the following guides and resources:
+
+* [A non exauhstive list of valid OSC commands](https://github.com/RCOS-Virtual-Music/aframe-audio-components/tree/documentation/documentation/osc-commands.md) (Resource)
+* [Adding an internal UI component](https://github.com/RCOS-Virtual-Music/aframe-audio-components/tree/documentation/documentation/adding-an-internal-ui-component.md) (Guide)
+
+#### Compatibility
+
+Most A-Frame components are compatible with the OSC interface out-of the box. However, to ensure that the interactions with the entity are easily understood, it is reccomended that your provide an Attributes table and a Methods table for all the public facing properties and methods you would like accessible, as shown below. 
+
+##### Attribute table
+| Attribute | Component Mapping | Default Value |
+|--|--|--|
+| descriptive-name-a | componentNameA.propertyNameA | 0 |
+| descriptive-name-b | componentNameB.propertyNameB | "hello world" |
+
+##### Method table
+| Method | Description |
+|--|--|
+| methodA(arg1, arg2) | Description of method A |
+| methodB() | Description of method B |
+
+If you are making an individual component, it is still reccomended to make a table similar to the ones above. All of your schema variables should be recorded in the Attribute table and all of your public methods should be recorded in the Method table. 
+
+## References and Resources
 + [Open Sound Control Web Bridge](https://github.com/automata/osc-web)
