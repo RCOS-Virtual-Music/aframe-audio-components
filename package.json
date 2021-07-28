@@ -13,6 +13,7 @@
 		}
 	],
 	"dependencies": {
+		"aframe-ui-widgets": "^1.0.2",
 		"cors": "^2.8.5",
 		"node-osc": "6.0.2",
 		"socket.io": "^4.1.3"
