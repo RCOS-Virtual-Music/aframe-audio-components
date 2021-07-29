@@ -65,7 +65,7 @@ AFRAME.registerComponent('osc-lookup', {
 			let e_id = AFRAME.utils.entity.getComponentProperty(entities[i], 'osc-receiver');
 
             if (id == -2) { /* No checks */ }
-            else if (id == -1) { if (e_id == undefined) { continue; } }
+            else if (id === -1) { if (e_id == undefined) { continue; } }
             else if (e_id < 0 || id != e_id) { continue; }
             console.log(e_id)
 			// If we found the id to be valid (strictly true), call the function
@@ -73,20 +73,20 @@ AFRAME.registerComponent('osc-lookup', {
 		}
 	},
     runOSC: function(message) {
-        var path = message[0].split('/');
-        var args = message.slice(1);
-        args.unshift(path[1]);
-        var id = 0;
+        if (message.length !== 2) { return; }
+        let path = message[0].split('/');
+        let arg = message[1];
+        let cmd = path[path.length - 1];
         // Check if command path is invalid
-        if (path.length != 3) { return; }
+        if (path.length < 3) { return; }
         // Check the root path name (component or a special operator) and pass off the call
-        if (path[2] == 'adds' || path[2] == 'subs') {
-            if (args.length == 5) { id = args[4]; args = args.slice(0, 4); }
-            else if (args.length == 3) { args.push((path[2] == 'adds') ? 1 : 0); }
+        if (cmd === 'adds' || cmd === 'subs') {
+            if (args.length === 5) { id = args[4]; args = args.slice(0, 4); }
+            else if (args.length === 3) { args.push((path[2] === 'adds') ? 1 : 0); }
             if (args.length != 4) { return; }
             this._run.call(this, eval(`this._${path[2]}`), path[1], args, id);
         }
-        else if (path[2] == 'set' || path[2] == 'add' || path[2] == 'sub') {
+        else if (cmd === 'set' || cmd === 'add' || cmd === 'sub') {
             if (args.length == 4) { id = args[3]; args = args.slice(0, 3); }
             if (args.length != 3) { return; }
             this._run.call(this, eval(`this._${path[2]}`), path[1], args, id);
