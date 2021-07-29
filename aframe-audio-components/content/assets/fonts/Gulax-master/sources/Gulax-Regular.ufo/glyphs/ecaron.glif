@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ecaron" format="2">
+	<advance width="437"/>
+	<unicode hex="011B"/>
+	<outline>
+		<component base="e"/>
+		<component base="caroncomb" xOffset="40"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-29 09:53:26 +0000</string>
+		</dict>
+	</lib>
+</glyph>

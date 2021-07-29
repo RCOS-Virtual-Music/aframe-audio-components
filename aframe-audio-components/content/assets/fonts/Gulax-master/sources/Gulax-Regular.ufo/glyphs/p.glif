@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="p" format="2">
+	<advance width="507"/>
+	<unicode hex="0070"/>
+	<note>
+		p
+	</note>
+	<outline>
+		<component base="q" xScale="-1" xOffset="507"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 09:57:38 +0000</string>
+		</dict>
+	</lib>
+</glyph>

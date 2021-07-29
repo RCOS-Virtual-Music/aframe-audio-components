@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="ellipsis" format="2">
+	<advance width="565"/>
+	<unicode hex="2026"/>
+	<note>
+		ellipsis
+	</note>
+	<outline>
+		<contour>
+			<point x="45" y="0" type="line"/>
+			<point x="144" y="0" type="line"/>
+			<point x="144" y="99" type="line"/>
+			<point x="45" y="99" type="line"/>
+		</contour>
+		<contour>
+			<point x="421" y="99" type="line"/>
+			<point x="421" y="0" type="line"/>
+			<point x="520" y="0" type="line"/>
+			<point x="520" y="99" type="line"/>
+		</contour>
+		<contour>
+			<point x="233" y="0" type="line"/>
+			<point x="332" y="0" type="line"/>
+			<point x="332" y="99" type="line"/>
+			<point x="233" y="99" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 09:57:38 +0000</string>
+			<key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+			<string>period</string>
+			<key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+			<string>period</string>
+		</dict>
+	</lib>
+</glyph>

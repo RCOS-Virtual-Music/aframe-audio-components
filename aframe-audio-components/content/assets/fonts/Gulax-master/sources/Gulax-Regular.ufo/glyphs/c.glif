@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="c" format="2">
+	<advance width="449"/>
+	<unicode hex="0063"/>
+	<anchor x="226" y="467" name="top"/>
+	<anchor x="230" y="0" name="bottom"/>
+	<note>
+		c
+	</note>
+	<outline>
+		<contour>
+			<point x="58" y="246" type="line"/>
+			<point x="58" y="1" type="line"/>
+			<point x="57" y="0" type="line"/>
+			<point x="391" y="0" type="line"/>
+			<point x="391" y="90" type="line"/>
+			<point x="155" y="90" type="line"/>
+			<point x="155" y="246" type="line"/>
+		</contour>
+		<contour>
+			<point x="155" y="246" type="line"/>
+			<point x="155" y="297" type="line" smooth="yes"/>
+			<point x="155" y="356"/>
+			<point x="184" y="387"/>
+			<point x="233" y="387" type="curve" smooth="yes"/>
+			<point x="269" y="387"/>
+			<point x="303" y="369"/>
+			<point x="317" y="306" type="curve"/>
+			<point x="407" y="345" type="line"/>
+			<point x="379" y="439"/>
+			<point x="308" y="477"/>
+			<point x="226" y="477" type="curve" smooth="yes"/>
+			<point x="134" y="477"/>
+			<point x="58" y="420"/>
+			<point x="58" y="309" type="curve" smooth="yes"/>
+			<point x="58" y="246" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-29 09:53:18 +0000</string>
+			<key>com.schriftgestaltung.Glyphs.layer.leftMetricsKey</key>
+			<string>==n-10</string>
+			<key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+			<string>n</string>
+			<key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+			<string>=n-25</string>
+		</dict>
+	</lib>
+</glyph>

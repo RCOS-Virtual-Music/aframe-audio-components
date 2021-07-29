@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Scaron" format="2">
+	<advance width="508"/>
+	<unicode hex="0160"/>
+	<outline>
+		<component base="S"/>
+		<component base="caroncomb" xOffset="67" yOffset="153"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-29 07:51:40 +0000</string>
+		</dict>
+	</lib>
+</glyph>

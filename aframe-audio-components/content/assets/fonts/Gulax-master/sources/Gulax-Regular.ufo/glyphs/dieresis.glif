@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="dieresis" format="2">
+	<advance width="392"/>
+	<unicode hex="00A8"/>
+	<anchor x="204" y="467" name="_top"/>
+	<note>
+		dieresis
+	</note>
+	<outline>
+		<contour>
+			<point x="73" y="527" type="line"/>
+			<point x="174" y="527" type="line"/>
+			<point x="174" y="627" type="line"/>
+			<point x="73" y="627" type="line"/>
+		</contour>
+		<contour>
+			<point x="234" y="627" type="line"/>
+			<point x="234" y="527" type="line"/>
+			<point x="335" y="527" type="line"/>
+			<point x="335" y="627" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 09:57:38 +0000</string>
+		</dict>
+	</lib>
+</glyph>

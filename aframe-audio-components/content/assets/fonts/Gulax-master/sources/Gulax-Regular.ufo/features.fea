@@ -1,0 +1,25 @@
+# Prefix: Languagesystems
+# automatic
+languagesystem DFLT dflt;
+
+feature aalt {
+# automatic
+feature ordn;
+feature case;
+} aalt;
+
+feature ordn {
+# automatic
+sub N o period by numero;
+} ordn;
+
+feature case {
+# automatic
+sub dieresis by dieresis.case;
+sub grave by grave.case;
+sub acute by acute.case;
+sub circumflex by circumflex.case;
+sub ring by ring.case;
+sub tilde by tilde.case;
+} case;
+

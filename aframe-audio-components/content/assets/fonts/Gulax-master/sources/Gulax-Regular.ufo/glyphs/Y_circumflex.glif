@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="Ycircumflex" format="2">
+	<advance width="550"/>
+	<unicode hex="0176"/>
+	<outline>
+		<component base="Y"/>
+		<component base="circumflex.case" xOffset="85" yOffset="162"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-29 08:36:08 +0000</string>
+		</dict>
+	</lib>
+</glyph>
