@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="N" format="2">
+	<advance width="635"/>
+	<unicode hex="004E"/>
+	<anchor x="318" y="619" name="top"/>
+	<note>
+		N
+	</note>
+	<outline>
+		<contour>
+			<point x="472" y="620" type="line"/>
+			<point x="472" y="80" type="line"/>
+			<point x="417" y="85"/>
+			<point x="395" y="137"/>
+			<point x="384" y="206" type="curve" smooth="yes"/>
+			<point x="356" y="385" type="line" smooth="yes"/>
+			<point x="333" y="530"/>
+			<point x="297" y="630"/>
+			<point x="153" y="630" type="curve" smooth="yes"/>
+			<point x="73" y="630" type="line"/>
+			<point x="73" y="0" type="line"/>
+			<point x="163" y="0" type="line"/>
+			<point x="163" y="540" type="line"/>
+			<point x="235" y="536"/>
+			<point x="250" y="468"/>
+			<point x="265" y="378" type="curve" smooth="yes"/>
+			<point x="296" y="188" type="line" smooth="yes"/>
+			<point x="315" y="74"/>
+			<point x="360" y="-10"/>
+			<point x="484" y="-10" type="curve" smooth="yes"/>
+			<point x="562" y="-10" type="line"/>
+			<point x="562" y="620" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 16:33:32 +0000</string>
+			<key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+			<string>H</string>
+			<key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+			<string>H</string>
+		</dict>
+	</lib>
+</glyph>

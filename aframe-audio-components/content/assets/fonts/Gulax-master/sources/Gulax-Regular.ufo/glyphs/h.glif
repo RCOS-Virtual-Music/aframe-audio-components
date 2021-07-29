@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="h" format="2">
+	<advance width="501"/>
+	<unicode hex="0068"/>
+	<note>
+		h
+	</note>
+	<outline>
+		<contour>
+			<point x="387" y="477" type="line" smooth="yes"/>
+			<point x="297" y="477"/>
+			<point x="214" y="462"/>
+			<point x="143" y="402" type="curve"/>
+			<point x="162" y="385" type="line"/>
+			<point x="162" y="670" type="line"/>
+			<point x="67" y="670" type="line"/>
+			<point x="67" y="0" type="line"/>
+			<point x="162" y="0" type="line"/>
+			<point x="162" y="232" type="line" smooth="yes"/>
+			<point x="162" y="315"/>
+			<point x="200" y="384"/>
+			<point x="339" y="383" type="curve"/>
+			<point x="339" y="0" type="line"/>
+			<point x="434" y="0" type="line"/>
+			<point x="434" y="477" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 09:57:38 +0000</string>
+			<key>com.schriftgestaltung.Glyphs.leftMetricsKey</key>
+			<string>n</string>
+			<key>com.schriftgestaltung.Glyphs.rightMetricsKey</key>
+			<string>n</string>
+		</dict>
+	</lib>
+</glyph>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="period" format="2">
+	<advance width="191"/>
+	<unicode hex="002E"/>
+	<note>
+		period
+	</note>
+	<outline>
+		<contour>
+			<point x="146" y="102" type="line"/>
+			<point x="45" y="102" type="line"/>
+			<point x="45" y="0" type="line"/>
+			<point x="146" y="0" type="line"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-28 09:57:38 +0000</string>
+		</dict>
+	</lib>
+</glyph>
