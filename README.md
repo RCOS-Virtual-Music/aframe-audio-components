@@ -82,3 +82,8 @@ If you are making an individual component, it is still reccomended to make a tab
 
 ## References and Resources
 + [Open Sound Control Web Bridge](https://github.com/automata/osc-web)
++ [aframe-ui-widgets npm package](https://www.npmjs.com/package/aframe-ui-widgets)
++ [Open Sound Control Web Bridge](https://github.com/automata/osc-web)
++ [Karrik By Jean-Baptiste Morizot + Lucas Le Bihan, Velvetyne Type Foundry ](https://velvetyne.fr/fonts/karrik/)
++ [Gulax Regular by Morgan Gilbert + contributions by Anton Moglia, Velvetyne Type Foundry](https://velvetyne.fr/fonts/gulax/)
++ [Disket Mono by designed by Mariano Diez. Cyrillic set, by Denis Ignatov.](https://rostype.com/disket/)
