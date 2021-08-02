@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="bracketright" format="2">
+	<advance width="309"/>
+	<unicode hex="005D"/>
+	<note>
+		bracketright
+	</note>
+	<outline>
+		<component base="bracketleft" xScale="-1" xOffset="309"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.Glyphs.ComponentInfo</key>
+			<array>
+				<dict>
+					<key>alignment</key>
+					<integer>1</integer>
+					<key>index</key>
+					<integer>0</integer>
+					<key>name</key>
+					<string>bracketleft</string>
+				</dict>
+			</array>
+			<key>com.schriftgestaltung.Glyphs.lastChange</key>
+			<string>2021-03-29 09:14:32 +0000</string>
+		</dict>
+	</lib>
+</glyph>
