@@ -35,7 +35,7 @@ AFRAME.registerComponent('osc-decoder', {
 		// 129.161.x.x
         else if (n >= 65536) {
             ip[0] = "129";
-            ip[1] = "168";
+            ip[1] = "161";
 			n -= 65536;
             ip[2] = (Math.floor(n / 256)).toString();
             ip[3] = ((n % 256)).toString();
