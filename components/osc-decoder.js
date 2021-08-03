@@ -15,23 +15,32 @@ AFRAME.registerComponent('osc-decoder', {
     decodeIP: function(n) {
         ip = ['', '', '', '']
         // 10.x.x.x
-        if (n >= 1114112) {
+        if (n >= 1179648) {
             ip[0] = "10";
-            n -= 1114112;
+            n -= 1179648;
             ip[1] = (Math.floor(n / 65536)).toString();
             n -= Math.floor(n / 65536) * 65536;
             ip[2] = (Math.floor(n / 256)).toString();
             ip[3] = ((n % 256)).toString();
         }
         // 172.x.x.x
-        else if (n >= 65536) {
+        else if (n >= 131072) {
             ip[0] = "172";
-            n -= 65536;
+            n -= 131072;
             ip[1] = (Math.floor(n / 65536) + 16).toString();
             n -= Math.floor(n / 65536) * 65536;
             ip[2] = (Math.floor(n / 256)).toString();
             ip[3] = ((n % 256)).toString();
         }
+		// 129.161.x.x
+        else if (n >= 65536) {
+            ip[0] = "129";
+            ip[1] = "168";
+			n -= 65536;
+            ip[2] = (Math.floor(n / 256)).toString();
+            ip[3] = ((n % 256)).toString();
+        }
+        return `${ip[0]}.${ip[1]}.${ip[2]}.${ip[3]}`;
         // 192.168.x.x
         else {
             ip[0] = "192";

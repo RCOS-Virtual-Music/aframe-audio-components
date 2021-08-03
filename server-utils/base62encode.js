@@ -5,22 +5,28 @@ exports.encodeIP = function(ip) {
     let n = 0
     ip = ip.split('.');
     if (ip.length !== 4) { return undefined; }
-    if (ip[0] === '192') {
+    if (ip[0] === '192' && ip[1] === '168') {
         n += (parseInt(ip[2], 10)) * 256;
         n += parseInt(ip[3], 10);
+    }
+	else if (ip[0] === '129' && ip[1] === '161') {
+        n += (parseInt(ip[2], 10)) * 256;
+        n += parseInt(ip[3], 10);
+        n += 65536;
     }
     else if (ip[0] === '172') {
         n += (parseInt(ip[1], 10) - 16) * 65536;
         n += (parseInt(ip[2], 10)) * 256;
         n += parseInt(ip[3], 10);
-        n += 65536;
+        n += 131072;
     }
     else if (ip[0] === '10') {
         n += (parseInt(ip[1], 10)) * 65536;
         n += (parseInt(ip[2], 10)) * 256;
         n += parseInt(ip[3], 10);
-        n += 1114112;
+        n += 1179648;
     }
+	
     else { return undefined; }
     return n;
 }
