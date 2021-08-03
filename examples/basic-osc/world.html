@@ -5,18 +5,19 @@
     <title>Hello, World! - A-Frame</title>
     <meta name="description" content="Hello, World! - A-Frame">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
-    <script src="./../../components/osc-manager.js?v=2"></script>
-    <script src="./../../components/osc-receiver.js?v=2"></script>
-    <script src="./../../components/osc-lookup.js?v=2"></script>
+    <script src="node_modules/osc/dist/osc-browser.min.js"></script>
+    <script src="./../../components/osc-manager.js"></script>
+    <script src="./../../components/osc-receiver.js"></script>
+    <script src="./../../components/osc-lookup.js"></script>
+    <script src="./../../components/osc-decoder.js"></script>
   </head>
   <body>
-    <a-scene>
+    <a-scene osc-manager>
 		<a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" osc-receiver="0"></a-box>
 		<a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" osc-receiver="1"></a-sphere>
 		<a-cylinder position="1 0.75 -3" rotation="0 45 0" radius="0.5" height="1.5" color="#FFC65D" osc-receiver="2"></a-cylinder>
 		<a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-		<a-sky color="#ECECEC" osc-manager="oscHost: 127.0.0.1; bridgeHost: 127.0.0.1"></a-sky>
+		<a-sky color="#ECECEC"></a-sky>
     </a-scene>
   </body>
 </html>

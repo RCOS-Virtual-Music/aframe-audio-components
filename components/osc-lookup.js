@@ -14,7 +14,7 @@ AFRAME.registerComponent('osc-lookup', {
 		// Make sure the component has the property
 		if (entity.getAttribute(component)[property] == undefined) { return null; }
 		// Set the property to the given value
-        this._update(entity, component, property, value);
+    this._update(entity, component, property, value);
 		return value;
 	},
 	_add: function(entity, component, property, value) {
@@ -46,7 +46,6 @@ AFRAME.registerComponent('osc-lookup', {
 		return new_value;
 	},
 	_adds: function(entity, component, property, value, max) {
-        console.log('adds')
 		// Capture the new value in the property
 		let new_value = this._add(entity, component, property, value);
 		// Return if it was not updated
@@ -58,38 +57,40 @@ AFRAME.registerComponent('osc-lookup', {
 		}
 		return new_value;
 	},
-	_run: function(funct, c_name, args, id) {
-		var entities = document.querySelectorAll(`[${c_name}]`);
+  // Takes in the function to run, the argument array, and the id to target
+	_run: function(funct, args, id) {
+		var entities = document.querySelectorAll(`[${args[0]}]`);
 		for (let i = 0; i < entities.length; ++i) {
 			// Check the entity's id
 			let e_id = AFRAME.utils.entity.getComponentProperty(entities[i], 'osc-receiver');
-
-            if (id == -2) { /* No checks */ }
-            else if (id === -1) { if (e_id == undefined) { continue; } }
-            else if (e_id < 0 || id != e_id) { continue; }
-            console.log(e_id)
+      if (id === "*") { if (e_id == undefined) { continue; } }
+      else if (id != e_id) { continue; }
 			// If we found the id to be valid (strictly true), call the function
 			funct.call(this, entities[i], ...args);
 		}
 	},
-    runOSC: function(message) {
-        if (message.length !== 2) { return; }
-        let path = message[0].split('/');
-        let arg = message[1];
-        let cmd = path[path.length - 1];
-        // Check if command path is invalid
-        if (path.length < 3) { return; }
-        // Check the root path name (component or a special operator) and pass off the call
-        if (cmd === 'adds' || cmd === 'subs') {
-            if (args.length === 5) { id = args[4]; args = args.slice(0, 4); }
-            else if (args.length === 3) { args.push((path[2] === 'adds') ? 1 : 0); }
-            if (args.length != 4) { return; }
-            this._run.call(this, eval(`this._${path[2]}`), path[1], args, id);
-        }
-        else if (cmd === 'set' || cmd === 'add' || cmd === 'sub') {
-            if (args.length == 4) { id = args[3]; args = args.slice(0, 3); }
-            if (args.length != 3) { return; }
-            this._run.call(this, eval(`this._${path[2]}`), path[1], args, id);
-        }
+  runOSC: function(oscMsg) {
+    // Break up the address
+    let address = oscMsg.address.split("/");
+    if (address.length !== 5) { return; }
+    // Create the arguments in the form [component, schema, *kwargs]
+    let args = [address[2], address[3]];
+    oscMsg.args.forEach((arg) => {
+      args.push(arg.value)
+    });
+    // Get the command and id
+    let cmd = address[4];
+    let id = address[1];
+    // Pass it off to the call based on the cmd name
+    // Here we also add defeult args and do arg length checks
+    if (false /*cmd === 'adds' || cmd === 'subs'*/) {
+      if (args.length === 3) { args.push((cmd === 'adds') ? 1 : 0); }
+      if (args.length !== 4) { return; }
+      this._run.call(this, eval(`this._${cmd}`), args, id);
     }
+    else if (cmd === 'set' /*|| cmd === 'add' || cmd === 'sub'*/) {
+      if (args.length !== 3) { return; }
+      this._run.call(this, eval(`this._${cmd}`), args, id);
+    }
+  }
 })

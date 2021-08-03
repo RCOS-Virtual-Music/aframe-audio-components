@@ -1,15 +1,20 @@
 // Local requirements
-var base62 = require('./base62.js'),
-	utils = require('./utils.js'),
-	Client = require('./client.js');
+var base62 = require('./server-utils/base62encode.js'),
+	utils = require('./server-utils/utils.js'),
+	Client = require('./server-utils/client.js');
+	Room = require('./server-utils/room.js');
 
 // Store the logged-in clients
-var clients = [];
+var rooms = {};
+
+// Module requirements
 const http = require("http"),
 	fs = require('fs').promises,
-	osc = require('osc');
+	osc = require('osc'),
+	statik = require('node-static'),
+	WebSocket = require("ws");
 
-// We use thiese strigns a lot
+// We use these strings a lot
 const HOST = utils.getIPAddresses()[0],
 	PORT = 80,
 	CODE = base62.encode(base62.encodeIP(HOST));
@@ -24,25 +29,65 @@ var serverPort = 443,
 - HTTP SERVER ------------------------------------------------------------------
 ------------------------------------------------------------------------------*/
 
-const requestListener = function (req, res) {
-    // We do not want to serve the html worlds yet
-    if (index == undefined) {
-        res.writeHead(500);
-        res.end(err);
-        return;
-    }
-    res.setHeader("Content-Type", "text/html");
-    res.writeHead(200);
-    res.end(index);
-};
+// Create a node-static server instance to serve the './public' folder
+const fileServer = new statik.Server('./public');
 
-const server = http.createServer(requestListener);
-
-// Start the HTTP server for file API but nothing else
-server.listen(PORT, HOST, () => {
+// Start up the server
+require('http').createServer(function (request, response) {
+    request.addListener('end', function () {
+				// Split the variables and actual path
+				let url = request.url.toString().split("?")[0];
+				//console.log(url)
+				// Serve world.html or .js files in the examples directory
+				if (url.startsWith("/examples/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
+					fileServer.serveFile(".." + url, 200, {}, request, response);
+					return;
+				}
+				// Serve component.js files in the components directory
+				if (url.startsWith("/components/") && url.endsWith(".js")) {
+					fileServer.serveFile(".." + url, 200, {}, request, response);
+					return;
+				}
+				// Serve the base index file
+				if (url === "/") {
+					fileServer.serveFile("/../index.html", 200, {}, request, response);
+					return;
+				}
+				// Serve anything in the public directory by default
+				fileServer.serve(request, response);
+    }).resume();
+}).listen(PORT, HOST, () => {
 	let url = `http://${HOST}:${PORT}`
-    console.log(`HTTP server is running on ${url}`);
-	console.log(`  1) ${url}/codes`)
+	// Write the index file
+	fs.readFile(__dirname + "/index.html")
+    .then(contents => { index = contents; })
+    .catch(err => { console.error(`Could not read index.html file: ${err}`); }
+	);
+  console.log(`HTTP server is running on ${url}`);
+});
+
+/*------------------------------------------------------------------------------
+- WSS SERVER -------------------------------------------------------------------
+------------------------------------------------------------------------------*/
+
+var wss = new WebSocket.Server({
+  port: 8081
+});
+
+wss.on("connection", function (socket, request) {
+    var user = {
+			socket: new osc.WebSocketPort({ socket: socket }),
+			room: request.url.split("=")[1]
+		}
+		//console.log(socket._socket.address());
+		if (rooms[user.room] == undefined) {
+			// The room they asked for does not exist
+			// TODO: Send back an error message and have them exit back to the main screen
+		} else {
+			// Add them to their requested room
+			rooms[user.room].users.push(user);
+			console.log(`A browser has connected to room ${user.room}`);
+		}
 });
 
 /*------------------------------------------------------------------------------
@@ -55,26 +100,12 @@ var serverOSC = new osc.UDPPort({
     localPort: serverPortOSC,
     metadata: true
 });
-/*
-// Make the browser socket
-var browserOSC = new osc.WebSocketPort({
-	localAddress: "0.0.0.0",
-    localPort: clientPortOSC,
-    metadata: true
-});
-
-browserOSC.on("ready", function () {
-	console.log('ready?');
-	console.log(browserOSC);
-});
-
-browserOSC.open();
-*/
 
 // The server has started listening for client messages
 serverOSC.on("ready", function () {
-    var ipAddresses = utils.getIPAddresses();
-    console.log("Listening for OSC over UDP on the following hosts:");
+  var ipAddresses = utils.getIPAddresses();
+  console.log("Listening for OSC over UDP on the following hosts:");
+	console.log(`  0) Host: 127.0.0.1, Port: ${serverOSC.options.localPort}`);
 	for (var i = 0; i < ipAddresses.length; i++) {
 		console.log(`  ${i + 1}) Host: ${ipAddresses[i]}, Port: ${serverOSC.options.localPort}`);
 	}
@@ -83,21 +114,30 @@ serverOSC.on("ready", function () {
 // The server has recieved a OSC message from a client
 serverOSC.on("message", function (oscMsg, timeTag, info) {
 	if (info.family !== 'IPv4') { return; }
-	let client = new Client(info.address, info.port, CODE);
-	// Check to see if already logged in
-	clients.forEach((savedClient) => {
-		if (savedClient.is(client)) {
-			// Run the server command (if it is one) and if not pass it onto browsers
-			if (!utils.execServerCmd(clients, oscMsg, savedClient, true)) { client.broadcast(oscMsg); }
-			// End the loop
-			client = null;
+	//console.log(rooms);
+	let client = new Client(info.address, info.port);
+	let isServerCmd = oscMsg.address.search(/^\/(\*|(-\d))\/server\/[a-z]*$/g) !== -1;
+	// Check to see if this client is already hosting a room
+	Object.keys(rooms).forEach((rid) => {
+		if (client.is(rooms[rid].host)) {
+			// We have the room! Pass this off as a server command or room command
+			if (isServerCmd) {
+				utils.execServerCmd(rooms, oscMsg, rooms[rid].host)
+			} else {
+				rooms[rid].broadcast(oscMsg);
+			}
+			client = undefined;
 			return;
 		}
 	});
-	if (client == null) { return; }
-	// This is a new client: check to see if they are trying to log in
-	if (utils.execServerCmd(clients, oscMsg, client, false)) { return; }
-	// Client has not logged in: send login error
+	// We found a client
+	if (client == undefined) { return; }
+	// This is a new client: the only thing we will accept is server commands
+	if (isServerCmd) {
+		utils.execServerCmd(rooms, oscMsg, client);
+		return;
+	}
+	// Client has not logged in: send error
 	client.sendError(",s", ["You have not logged in yet!"]);
 });
 
@@ -120,56 +160,3 @@ serverOSC.on("error", function (err, timeTag, info) {
 
 // Open the OSC server port
 serverOSC.open();
-
-
-/*
-//Setup Server <--> Client connections
-//this.webOn = new osc.Server(obj.port.listen, webHost);
-var serverOSC = new osc.Server(serverPortOSC, obj.host);
-var clientOSC = new osc.Client(obj.host, clientPortOSC);
-
-// Track Client --> Server messages
-serverOSC.on('message', function(msg) {
-	//server.webSend.send(msg);
-	console.log('sent OSC Client message to Web Client', msg);
-	socket.emit('message', msg);
-});
-
-
-// When a Web Client connects, add them to a socket
-io.on('connection', socket => {
-	console.log('New connection attempted...');
-	// On Web Client connection sucess (config)
-	socket.on('config', function(obj) {
-		// Auto detect browser IP
-		let webHost = socket.conn.remoteAddress.slice(7)
-		// Log the connections
-		console.log(`Sucessful connection from ${webHost}:${obj.port.listen}`);
-
-		server = this;
-		// Send messages to the OSC Client
-		this.webOn.on('message', function(msg) {
-			socket.emit('message', msg);
-			console.log('sent Web Client message to OSC Client', msg);
-		});
-		// Send messages to the Web Client
-		this.oscOn.on('message', function(msg) {
-			//server.webSend.send(msg);
-			console.log('sent OSC Client message to Web Client', msg);
-			socket.emit('message', msg);
-		});
-		// Send a start command to the Web Client
-		socket.emit('message', ['/start']);
-	});
-	// When the Bridge recieves a message from the Web Client
-	socket.on('message', function(obj) {
-		var msg = obj.split(' ');
-		console.log('sent Web Client message to OSC Client', msg);
-		this.oscSend.send(...msg);
-	});
-	// When the Web Client disconnects
-	socket.on("disconnect", function () {
-		console.log('Web Client disconnected');
-	})
-});
-*/
