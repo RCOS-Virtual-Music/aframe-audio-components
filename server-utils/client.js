@@ -10,7 +10,7 @@ class Client {
 	}
   // Checks if one client is the same as another
   is(obj) {
-    return this.ip === obj.ip && this.port === obj.port;
+    return this.ip === obj.ip;
   }
   // Sends an error to the client
   sendError(tag, msg) {
