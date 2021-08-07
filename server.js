@@ -114,13 +114,15 @@ serverOSC.on("ready", function () {
 // The server has recieved a OSC message from a client
 serverOSC.on("message", function (oscMsg, timeTag, info) {
 	if (info.family !== 'IPv4') { return; }
-	//console.log(rooms);
+	console.log(info)
+	console.log(rooms);
 	let client = new Client(info.address, info.port);
 	let isServerCmd = oscMsg.address.search(/^\/(\*|(-\d))\/server\/[a-z]*$/g) !== -1;
 	// Check to see if this client is already hosting a room
 	Object.keys(rooms).forEach((rid) => {
 		if (client.is(rooms[rid].host)) {
 			// We have the room! Pass this off as a server command or room command
+			console.log("hi");
 			if (isServerCmd) {
 				utils.execServerCmd(rooms, oscMsg, rooms[rid].host, rooms[rid])
 			} else {

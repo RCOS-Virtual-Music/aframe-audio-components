@@ -55,9 +55,9 @@ var makeCode = function(rid) {
 	return ip + rid;
 }
 
-var login = function(rooms, client) {
+var login = function(rooms, client, undef) {
 	// Make sure the client is not logged in
-	if (client.isHost) {
+	if (client.isHost || undef !== undefined) {
 		client.sendError(",s", ["You have already logged in"]);
 		return;
 	}
@@ -98,7 +98,7 @@ var deploy = function(oscMsg, room) {
 exports.execServerCmd = function(rooms, oscMsg, client, room)  {
 	// Client is trying to login
 	if (oscMsg.address.split('/')[3] == 'login') {
-		login(rooms, client);
+		login(rooms, client, room);
 		return;
 	}
 	// Client is not logged in but trying to execute a non-login command
