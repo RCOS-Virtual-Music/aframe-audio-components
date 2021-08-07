@@ -19,7 +19,7 @@ AFRAME.registerComponent('osc-manager', {
 		let room = code.slice(-2);
 		let host = component.el.components['osc-decoder'].decode62(code.slice(0, -2));
 		host = component.el.components['osc-decoder'].decodeIP(host);
-		console.log("room", room);
+		console.log(`room ${room} (${component.el.components['osc-decoder'].decode62(room)})`);
 		console.log("host", host);
 
 		// Connect to the server
@@ -35,7 +35,6 @@ AFRAME.registerComponent('osc-manager', {
 		socket.open();
 		// Save the socket for later
 		this.socket = socket;
-
 
 		/*
 		// NOTE: IO is imported in index.html

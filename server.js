@@ -122,7 +122,7 @@ serverOSC.on("message", function (oscMsg, timeTag, info) {
 		if (client.is(rooms[rid].host)) {
 			// We have the room! Pass this off as a server command or room command
 			if (isServerCmd) {
-				utils.execServerCmd(rooms, oscMsg, rooms[rid].host)
+				utils.execServerCmd(rooms, oscMsg, rooms[rid].host, rooms[rid])
 			} else {
 				rooms[rid].broadcast(oscMsg);
 			}
@@ -134,7 +134,7 @@ serverOSC.on("message", function (oscMsg, timeTag, info) {
 	if (client == undefined) { return; }
 	// This is a new client: the only thing we will accept is server commands
 	if (isServerCmd) {
-		utils.execServerCmd(rooms, oscMsg, client);
+		utils.execServerCmd(rooms, oscMsg, client, undefined);
 		return;
 	}
 	// Client has not logged in: send error

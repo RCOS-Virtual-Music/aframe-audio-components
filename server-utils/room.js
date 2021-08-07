@@ -4,7 +4,7 @@ var base62 = require('./base62encode.js');
 // Class to handle logged-in clients
 class Room {
 	// Constructor
-	world = "examples/basic-osc";
+	world = undefined;
 	alias = "RCOS Virtual Music";
 	connected = false;
 	users = [];

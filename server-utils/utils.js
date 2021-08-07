@@ -3,6 +3,7 @@ var base62 = require('./base62encode.js');
 exports.SINFO = "/*/server/info";
 exports.SERROR = "/*/server/error";
 
+var DEFAULT = "examples/basic-osc";
 var rooms = [];
 
 // Retrieve IP addresses the server is running on
@@ -71,38 +72,53 @@ var login = function(rooms, client) {
 	// Open up the client's connection
 	client.open();
 	// Generate a room and add the client as the host of the room
+  console.log(rid);
 	let room = new Room(rid, client);
 	rooms[room.id] = room;
 	client.send(exports.parseOSC(
 		exports.SINFO,
+		",s",
+		["You have sucessfully logged in!"]
+	));
+}
+
+var deploy = function(oscMsg, room) {
+  // Set the world
+  var world;
+  if (oscMsg.args.length == 0) { room.world = DEFAULT; }
+  else { room.world = oscMsg.args[0]; }
+  room.host.send(exports.parseOSC(
+		exports.SINFO,
 		",ss",
-		["You have sucessfully logged in!", `Your room code is ${makeCode(room.id)}`]
+		["You world has been deployed!", `Your room code is ${makeCode(room.id)}`]
 	));
 }
 
 // Check for and execute OSC commands meant for the server to interpret
-exports.execServerCmd = function(rooms, oscMsg, client)  {
+exports.execServerCmd = function(rooms, oscMsg, client, room)  {
 	// Client is trying to login
 	if (oscMsg.address.split('/')[3] == 'login') {
 		login(rooms, client);
 		return;
 	}
 	// Client is not logged in but trying to execute a non-login command
-	if (!client.isHost()) {
-		client.sendError(",s", ["You must logged in to execute this command!"]);
+	if (!client.isHost || room == undefined) {
+		client.sendError(",s", ["You must be logged in to execute this command!"]);
 		return;
 	}
 	// Client is logged in: execute proper command
 	switch (oscMsg.address.split('/')[3]) {
 		// Client would like to set the world they are using
 		case 'deploy':
-			// Make sure the client is logged in
-			if (client.isHost) {
-				client.sendError(",s", ["You must logged in first"]);
-				return;
-			}
+			deploy(oscMsg, room);
 			break;
-		case 'world':
+		case 'code':
+      client.send(exports.parseOSC(
+        exports.SINFO,
+        ",s",
+        [`${makeCode(room.id)}`]
+      ));
+      break;
 	}
 	// Command is unknown
 	client.sendError(",s", "Unknown command!");
