@@ -13,15 +13,12 @@ AFRAME.registerComponent('osc-manager', {
 		var component = this;
 		// Make sure we have a room to connect to, otherwise STOP
 		let code = AFRAME.utils.getUrlParameter('room')
-		if (code === "") {
-			return;
-		}
+		if (code === "") { window.location.reload() }
 		let room = code.slice(-2);
 		let host = component.el.components['osc-decoder'].decode62(code.slice(0, -2));
 		host = component.el.components['osc-decoder'].decodeIP(host);
 		console.log(`room ${room} (${component.el.components['osc-decoder'].decode62(room)})`);
 		console.log("host", host);
-
 		// Connect to the server
 		var socket = new osc.WebSocketPort({
 	    url: `ws://${host}:8081?room=${room}`, // URL to your Web Socket server.
@@ -29,48 +26,30 @@ AFRAME.registerComponent('osc-manager', {
 		});
 		// Receive messages
 		socket.on("message", function (oscMsg) {
-			let msg = component.el.components['osc-lookup'].runOSC(oscMsg);
+			if (oscMsg.address === "/*/server/error") {
+				window.location.reload();
+				return;
+			}
+			//let oscHear = component.el.components['osc-lookup'].parse('/*/rotation/x/set', ',f', 12.1);
+			let oscResponse = component.el.components['osc-lookup'].runOSC(oscMsg);
 		});
-		// Open the socket
-		socket.open();
+		// Reload on error
+		socket.on("error", function (error) {
+		  console.log("ERROR:", error);
+			//window.location.reload()
+		});
+		// Log the connection
+		socket.on("ready", function (error) {
+		  console.log(`Connected to ${host} at room ${room}`);
+		});
 		// Save the socket for later
 		this.socket = socket;
-
-		/*
-		// NOTE: IO is imported in index.html
-		// Make the connection to the Server
-		console.log(`Attempting to connect to ${component.data.server}:8081`);
-		var socket = io('http://' + host + ':8081');
-		// On connection sucess
-		socket.on('connect', function() {
-			// Log the sucesful connection
-			console.log(`Connected to ${component.data.bridgeHost}:8081`);
-			// Config the connection
-			socket.emit('config',
-				{
-					port: {
-						listen: component.data.sendPort,
-						recieve: component.data.listenPort,
-					},
-					host: component.data.oscHost
-				}
-			);
-			// Emit a connected message to any OSC listening
-			component.returnData(`${component.data.recievePort}/connected ${component.data.bridgeHost}`);
-			// When we recieve an OSC message
-			socket.on('message', function(message) {
-				// Send the message off to the lookup component for parsing
-				console.log(component.el.components.position)
-				let msg = component.el.components['osc-lookup'].runOSC(message);
-				component.returnData(msg);
-			});
-
-		})*/
+		// Open the socket
+		socket.open();
 	},
 	// Function to send back data to the host OSC client
 	// NOTE: This must be formated as an OSC string
-	emit: function(msg) {
-		if (msg == null || msg[0] !== '/') { return; }
-		//socket.emit('message', msg);
+	send: function(oscMsg) {
+		this.socket.send(oscMsg);
 	}
 })

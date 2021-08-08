@@ -72,7 +72,6 @@ var login = function(rooms, client, undef) {
 	// Open up the client's connection
 	client.open();
 	// Generate a room and add the client as the host of the room
-  console.log(rid);
 	let room = new Room(rid, client);
 	rooms[room.id] = room;
 	client.send(exports.parseOSC(
@@ -86,7 +85,9 @@ var deploy = function(oscMsg, room) {
   // Set the world
   var world;
   if (oscMsg.args.length == 0) { room.world = DEFAULT; }
-  else { room.world = oscMsg.args[0]; }
+  else { room.world = oscMsg.args[0].value; }
+  if (!room.world.endsWith("/")) { room.world += "/"; }
+  if (!room.world.startsWith("/")) { room.world = "/" + room.world; }
   room.host.send(exports.parseOSC(
 		exports.SINFO,
 		",ss",

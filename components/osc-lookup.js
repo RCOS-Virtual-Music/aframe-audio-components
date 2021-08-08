@@ -69,6 +69,32 @@ AFRAME.registerComponent('osc-lookup', {
 			funct.call(this, entities[i], ...args);
 		}
 	},
+  parse: function(address, tag, msg) {
+  	// Make sure the msg is an array
+  	if (!Array.isArray(msg)) {
+      console.log("ERROR: Invalid OSC value array");
+      return;
+    }
+  	// Make sure we have enough arguments
+  	if (tag.length - 1 !== msg.length) {
+      console.log("ERROR: OSC tag does not match OSC value array");
+      return;
+    }
+  	// Make the args
+  	let args = [];
+  	msg.forEach((value, i) => {
+  		args.push({
+  			type: tag[i + 1],
+  			value: value
+  		});
+  	});
+  	// Return the OSC object
+  	let oscMsg = {
+  		address: address,
+  		args: args
+  	};
+  	return oscMsg;
+  },
   runOSC: function(oscMsg) {
     // Break up the address
     let address = oscMsg.address.split("/");
@@ -83,12 +109,12 @@ AFRAME.registerComponent('osc-lookup', {
     let id = address[1];
     // Pass it off to the call based on the cmd name
     // Here we also add defeult args and do arg length checks
-    if (false /*cmd === 'adds' || cmd === 'subs'*/) {
+    if (cmd === 'adds' || cmd === 'subs') {
       if (args.length === 3) { args.push((cmd === 'adds') ? 1 : 0); }
       if (args.length !== 4) { return; }
       this._run.call(this, eval(`this._${cmd}`), args, id);
     }
-    else if (cmd === 'set' /*|| cmd === 'add' || cmd === 'sub'*/) {
+    else if (cmd === 'set' || cmd === 'add' || cmd === 'sub') {
       if (args.length !== 3) { return; }
       this._run.call(this, eval(`this._${cmd}`), args, id);
     }

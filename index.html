@@ -11,17 +11,43 @@
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
      <!-- Latest compiled JavaScript -->
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+     <!-- OSC Sockets -->
+     <script src="node_modules/osc/dist/osc-browser.min.js"></script>
      <!-- CSS for this page -->
     <link rel="stylesheet" type="text/css" href="content/styles/join-room-style.css" >
     <!-- JS function -->
     <script type="text/javascript">
       function redirectToURL(){
+        // Validate input
         const input = document.getElementById("roomCodeInput");
         if (input.value === "") {
           window.location.href = window.location.href.replace("?", "");
+          // TO-DO: Tell the user their code was invalid
           return false;
         }
-        window.location.assign(window.location.href + "examples/basic-osc/world.html?room=" + input.value);
+        // Handshake
+        let site = window.location.href.replace("?", "");
+        if (site.endsWith("/")) { site = site.slice(0, -1); }
+    		var socket = new osc.WebSocketPort({
+    	    url: `ws${site.replace("http", "")}:8081?handshake=${input.value}`, // URL to your Web Socket server.
+    	    metadata: true
+    		});
+    		socket.on("message", function (oscMsg) {
+          if (oscMsg.args[0].value == "ERROR: bad room") {
+            // TO-DO: Tell the user their code was invalid
+          } else {
+            // Change room
+            window.location.assign(site + oscMsg.args[0].value + "?room=" + input.value);
+          }
+    		});
+        socket.on("error", function (error) {
+          // TO-DO: Tell the user there was an unknown error
+          console.log("ERROR: Unknown error");
+          window.location.href = window.location.href.replace("?", "");
+    		  return false;
+    		});
+        window.location.href = window.location.href.replace("?", "");
+    		socket.open();
         return false;
       }
     </script>
@@ -32,10 +58,10 @@
         <h1>Virtual Electronic Music</h1>
         <h2>A Rensselaer Center for Open Source (RCOS) Project</h2>
       </div>
-      <form action="" id="joinRoomForm" onSubmit="return redirectToURL();">
+      <form action="" id="joinRoomForm" onSubmit="redirectToURL()">
         <label for="roomCodeInput">ENTER YOUR ROOM CODE BELOW:</label>
         <input type="text" id="roomCodeInput" placeholder="Enter room code" aria-placeholder="Enter room code">
-        <button id="joinRoomButton" type="button">JOIN ROOM</button>
+        <button id="joinRoomButton" type="button" onClick="redirectToURL()">JOIN ROOM</button>
       </form>
       <!-- This is where the error message should appear and the code for the error message -->
       <!--

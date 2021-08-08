@@ -1,12 +1,15 @@
 var utils = require('./utils.js');
 var base62 = require('./base62encode.js');
 
+var clientPortOSC = 3334;
+
 class Client {
   connected = false;
   isHost = false;
-  constructor (ip, port) {
+  constructor (ip, port, socket) {
 		this.ip = ip;
 		this.port = port;
+    this.socket = socket;
 	}
   // Checks if one client is the same as another
   is(obj) {
@@ -23,7 +26,12 @@ class Client {
   // Sends a message to the client
   send(oscMsg) {
     if (!this.connected) { return; }
-    console.log(oscMsg);
+    if (oscMsg === undefined) { console.log("ERROR: Got invalid OSC"); return; }
+    if (oscMsg.address == utils.SERROR || oscMsg.address == utils.SINFO) {
+      console.log("From [Server] to [Host]: ", oscMsg);
+    } else { console.log("From [Browser] to [Host]: ", oscMsg); }
+    // Send OSC
+    this.socket.send(oscMsg, this.ip, clientPortOSC);
   }
   // Opens the server --> client connection
   open() {

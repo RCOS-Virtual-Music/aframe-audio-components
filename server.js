@@ -22,7 +22,6 @@ const HOST = utils.getIPAddresses()[0],
 //
 var serverPort = 443,
 	serverPortOSC = 3333, // osc used 57121
-	clientPortOSC = 9000,
 	index = undefined;
 
 /*------------------------------------------------------------------------------
@@ -40,6 +39,11 @@ require('http').createServer(function (request, response) {
 				//console.log(url)
 				// Serve world.html or .js files in the examples directory
 				if (url.startsWith("/examples/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
+					fileServer.serveFile(".." + url, 200, {}, request, response);
+					return;
+				}
+				// Serve .js files in the node-modules directory
+				if (url.startsWith("/node_modules/") && url.endsWith(".js")) {
 					fileServer.serveFile(".." + url, 200, {}, request, response);
 					return;
 				}
@@ -75,19 +79,30 @@ var wss = new WebSocket.Server({
 });
 
 wss.on("connection", function (socket, request) {
-    var user = {
-			socket: new osc.WebSocketPort({ socket: socket }),
-			room: request.url.split("=")[1]
-		}
-		//console.log(socket._socket.address());
-		if (rooms[user.room] == undefined) {
-			// The room they asked for does not exist
-			// TODO: Send back an error message and have them exit back to the main screen
+	// Get the user
+  var user = {
+		socket: new osc.WebSocketPort({ socket: socket, metadata: true }),
+		room: request.url.split("=")[1].slice(-2)
+	}
+	//console.log(socket._socket.address());
+	// Ensure the room code and world are defined (login and deploy)
+	if (rooms[user.room] === undefined || rooms[user.room].world === undefined) {
+		// The room they asked for does not exist
+		user.socket.send(utils.parseOSC(utils.SERROR, ",s", ["ERROR: bad room"]));
+	} else {
+		if (request.url.split("=")[0] == "/?handshake") {
+			// This is a handshake: let them know the room has been verified and send them the last part of the url
+			user.socket.send(utils.parseOSC(utils.SINFO, ",s", [rooms[user.room].world + "world.html"]));
 		} else {
+			// Add them a good ol socket
+	    user.socket.on("message", function (oscMsg) {
+				rooms[user.room].host.send(oscMsg);
+	    });
 			// Add them to their requested room
 			rooms[user.room].users.push(user);
 			console.log(`A browser has connected to room ${user.room}`);
 		}
+	}
 });
 
 /*------------------------------------------------------------------------------
@@ -114,15 +129,15 @@ serverOSC.on("ready", function () {
 // The server has recieved a OSC message from a client
 serverOSC.on("message", function (oscMsg, timeTag, info) {
 	if (info.family !== 'IPv4') { return; }
-	console.log(info)
-	console.log(rooms);
-	let client = new Client(info.address, info.port);
+	let client = new Client(info.address, info.port, serverOSC);
 	let isServerCmd = oscMsg.address.search(/^\/(\*|(-\d))\/server\/[a-z]*$/g) !== -1;
+	// Log the message
+	if (isServerCmd) { console.log("From [Host] to [Server]: ", oscMsg); }
+	else { console.log("From [Host] to [Browser]: ", oscMsg); }
 	// Check to see if this client is already hosting a room
 	Object.keys(rooms).forEach((rid) => {
 		if (client.is(rooms[rid].host)) {
 			// We have the room! Pass this off as a server command or room command
-			console.log("hi");
 			if (isServerCmd) {
 				utils.execServerCmd(rooms, oscMsg, rooms[rid].host, rooms[rid])
 			} else {
