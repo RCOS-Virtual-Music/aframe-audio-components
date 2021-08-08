@@ -6,10 +6,11 @@
     <meta name="description" content="Hello, World! - A-Frame" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <!-- <script src="./test_script.js"></script> -->
-    <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
+    <script src="node_modules/osc/dist/osc-browser.min.js"></script>
     <script src="./../../components/osc-manager.js?v=2"></script>
     <script src="./../../components/osc-receiver.js?v=2"></script>
     <script src="./../../components/osc-lookup.js?v=2"></script>
+    <script src="./../../components/osc-decoder.js"></script>
     <script src="./../../components/vem-osc-knobs.js"></script>
     <!--A Frame UI-->
     <script src="https://gitcdn.link/repo/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
@@ -116,7 +117,7 @@
       ></a-plane>
       <a-sky
         color="#33333"
-        osc-manager="oscHost: 127.0.0.1; bridgeHost: 127.0.0.1"
+        osc-manager
       ></a-sky>
     </a-scene>
   </body>
