@@ -10,7 +10,7 @@ var rooms = [];
 exports.getIPAddresses = function () {
   var os = require("os"),
     interfaces = os.networkInterfaces();
-    print(interfaces);
+    console.log(interfaces);
     ipAddresses = [];
   for (var deviceName in interfaces) {
     var addresses = interfaces[deviceName];
