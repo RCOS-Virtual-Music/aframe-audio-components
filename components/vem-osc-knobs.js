@@ -1,9 +1,8 @@
-// const { Message } = require("node-osc");
 /*
     This component provides a boilerplate AFrame component for using A-Frame objects with VEM's OSC commands (to be used with the knobs.html scene).
     In this component, we use the npm package a-frame-ui-widgets as an UI connnected to VEM's osc-components.
  */
-AFRAME.registerComponent("vem-osc-knobs", {
+AFRAME.registerComponent("vem-osc-knobs", { // !! Rename
   dependencies: ["osc-lookup"],
   schema: {
     on: {
@@ -13,19 +12,19 @@ AFRAME.registerComponent("vem-osc-knobs", {
     },
 
     isTargetEntity: {
-      // for A-Frame object to be manipulated
+      // denotes that a A-Frame object can be manipulated
       type: "boolean",
       default: false,
     },
 
-    objectType: {
-      // either an UI control or an geometry (further specified)
+    objectType: { // !! may need to denete
+      // denotes either an UI control or an geometry (further specified)
       type: "string",
       default: "",
     },
 
     isUI: {
-      // if it's an UI control
+      // denotes if entity is an UI control
       type: "boolean",
       default: false,
     },
@@ -73,29 +72,20 @@ AFRAME.registerComponent("vem-osc-knobs", {
       // function for checking what UI type and setting osc_message
       function controlTypeOSCMessage() {
         var osc_message = "";
-        controlType = el.id; // !! check if this  (querySelector) is right property - also change to id instead
-        var newColor = randomColor();
+        controlType = el.id; 
         switch (controlType) {
           case "cubeControl": // id of UI control
-            osc_message = ["/material/set", "color", newColor, 0];
+            osc_message = ["/material/set", "color", newColor, 0]; // OSC message / action you want to send and the osc-receiver # of the object you want to send to
             break;
           case "sphereControl": // !! ACTION
             osc_message = ["/material/set", "color", newColor, 1];
             break;
-          /*case 'valueSlider': // needs value slider to be fixed before assigning an action
-            osc_message = ['/position/set', 'x', 10, -1];
-            break;
-          */
           case "cylinderControl": // !! ACTION
             osc_message = ["/material/set", "color", newColor, 2];
             break;
           case "allControl": // !! ACTION
             osc_message = ["/material/set", "color", newColor, -1];
             break;
-          /*case 'rotaryKnob': // needs rotary knob to be fixed before assigning an action
-            osc_message = ['/position/set', 'x', 10, -1];
-            break;
-          */
         }
         return osc_message;
       }
