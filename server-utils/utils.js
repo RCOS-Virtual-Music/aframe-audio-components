@@ -9,7 +9,8 @@ var rooms = [];
 // Retrieve IP addresses the server is running on
 exports.getIPAddresses = function () {
   var os = require("os"),
-    interfaces = os.networkInterfaces(),
+    interfaces = os.networkInterfaces();
+    print(interfaces);
     ipAddresses = [];
   for (var deviceName in interfaces) {
     var addresses = interfaces[deviceName];
