@@ -32,33 +32,33 @@ const fileServer = new statik.Server('./public');
 for (let i = 0; i < HOSTS.length; i++) {
 	// Start up servers on each HOST
 	require('http').createServer(function (request, response) {
-	    request.addListener('end', function () {
-					// Split the variables and actual path
-					let url = request.url.toString().split("?")[0];
-					//console.log(url)
-					// Serve world.html or .js files in the examples directory
-					if (url.startsWith("/examples/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
-						fileServer.serveFile(".." + url, 200, {}, request, response);
-						return;
-					}
-					// Serve .js files in the node-modules directory
-					if (url.startsWith("/node_modules/") && url.endsWith(".js")) {
-						fileServer.serveFile(".." + url, 200, {}, request, response);
-						return;
-					}
-					// Serve component.js files in the components directory
-					if (url.startsWith("/components/") && url.endsWith(".js")) {
-						fileServer.serveFile(".." + url, 200, {}, request, response);
-						return;
-					}
-					// Serve the base index file
-					if (url === "/") {
-						fileServer.serveFile("/../index.html", 200, {}, request, response);
-						return;
-					}
-					// Serve anything in the public directory by default
-					fileServer.serve(request, response);
-	    }).resume();
+    request.addListener('end', function () {
+			// Split the variables and actual path
+			let url = request.url.toString().split("?")[0];
+			//console.log(url)
+			// Serve world.html or .js files in the examples directory
+			if (url.startsWith("/examples/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
+				fileServer.serveFile(".." + url, 200, {}, request, response);
+				return;
+			}
+			// Serve .js files in the node-modules directory
+			if (url.startsWith("/node_modules/") && url.endsWith(".js")) {
+				fileServer.serveFile(".." + url, 200, {}, request, response);
+				return;
+			}
+			// Serve component.js files in the components directory
+			if (url.startsWith("/components/") && url.endsWith(".js")) {
+				fileServer.serveFile(".." + url, 200, {}, request, response);
+				return;
+			}
+			// Serve the base index file
+			if (url === "/") {
+				fileServer.serveFile("/../index.html", 200, {}, request, response);
+				return;
+			}
+			// Serve anything in the public directory by default
+			fileServer.serve(request, response);
+	  }).resume();
 	}).listen(PORT, HOSTS[i], () => {
 		let url = `http://${HOSTS[i]}:${PORT}`
 		// Write the index file

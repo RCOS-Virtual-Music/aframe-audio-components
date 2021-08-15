@@ -10,9 +10,11 @@ var rooms = [];
 exports.getIPAddresses = function () {
   var os = require("os"),
   interfaces = os.networkInterfaces();
-  console.log(interfaces["Wi-Fi"]);
   ipAddresses = [];
-  var addresses = interfaces["Wi-Fi"];
+  let addresses = interfaces["Wi-Fi"];
+  if (addresses === undefined) {
+    addresses = interfaces["enp0s25"];
+  }
   for (let i = 0; i < addresses.length; i++) {
     var addressInfo = addresses[i];
     if (addressInfo.family === "IPv4" && !addressInfo.internal) {
@@ -47,8 +49,8 @@ exports.parseOSC = function (address, tag, msg) {
 var ip = undefined;
 var makeCode = function(rid, ip) {
 	// Get the IP if we dont have it yet and encode it to get the server code
-	if (ip == undefined) {
-		ip = base62.encode(base62.encodeIP(ip));
+	if (ip === undefined) {
+		ip = base62.encode(base62.encodeIP(ip)[0]);
 	}
 	return ip + rid;
 }
