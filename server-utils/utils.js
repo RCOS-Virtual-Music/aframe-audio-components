@@ -46,10 +46,9 @@ exports.parseOSC = function (address, tag, msg) {
 
 // Return a server code givena room code
 var ip = undefined;
-var makeCode = function(rid) {
+var makeCode = function(rid, ip) {
 	// Get the IP if we dont have it yet and encode it to get the server code
 	if (ip == undefined) {
-		ip = exports.getIPAddresses()[0];
 		ip = base62.encode(base62.encodeIP(ip));
 	}
 	return ip + rid;
