@@ -6,18 +6,15 @@
     <meta name="description" content="Hello, World! - A-Frame" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <!-- <script src="./test_script.js"></script> -->
-    <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
-    <script src="./../../components/osc-manager.js?v=2"></script>
-    <script src="./../../components/osc-receiver.js?v=2"></script>
-    <script src="./../../components/osc-lookup.js?v=2"></script>
-    <script src="./../../components/vem-osc-knobs.js"></script>
+    <script src="node_modules/osc/dist/osc-browser.min.js"></script>
+    <script src="./../../../components/osc-manager.js"></script>
+    <script src="./../../../components/osc-receiver.js"></script>
+    <script src="./../../../components/osc-lookup.js"></script>
+    <script src="./../../../components/osc-decoder.js"></script>
+    <script src="./../../../components/vem-osc-knobs.js"></script>
     <!--A Frame UI-->
     <script src="https://gitcdn.link/repo/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
-    <!--Superhands-->
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
-    <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
-</head>
+  </head>
   <body>
     <a-scene>
       <a-assets>
@@ -36,14 +33,9 @@
         <a-mixin id="yellow" material="color: #FFF88E;"></a-mixin>
         <a-mixin id="offset" position="0 0.01 0"></a-mixin>
       </a-assets>
-      <a-entity>
-        <a-camera>
-            <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
-          </a-camera>
-        <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
-        <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>
-      </a-entity>
-      
+      <a-camera>
+        <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
+      </a-camera>
       <!--UI CONTROLS-->
       <!-- Button, custom styles -->
       <a-entity
@@ -94,7 +86,6 @@
         vem-osc-knobs="on: false; isUI: false"
         position="-1 0.5 -3"
         rotation="0 45 0"
-        hoverable grabbable stretchable draggable dropppable
         color="#4CC3D9"
         osc-receiver="0"
         animation="property: components.material.material.color; type: color; from: blue; to: red; dur: 5000;  begin: click"
@@ -126,7 +117,7 @@
       ></a-plane>
       <a-sky
         color="#33333"
-        osc-manager="oscHost: 127.0.0.1; bridgeHost: 127.0.0.1"
+        osc-manager
       ></a-sky>
     </a-scene>
   </body>

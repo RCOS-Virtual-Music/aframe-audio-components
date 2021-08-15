@@ -3,7 +3,7 @@ var base62 = require('./base62encode.js');
 exports.SINFO = "/*/server/info";
 exports.SERROR = "/*/server/error";
 
-var DEFAULT = "examples/basic-osc";
+var DEFAULT = "examples/worlds/basic-osc";
 var rooms = [];
 
 // Retrieve IP addresses the server is running on
@@ -86,6 +86,9 @@ var deploy = function(oscMsg, room) {
   var world;
   if (oscMsg.args.length == 0) { room.world = DEFAULT; }
   else { room.world = oscMsg.args[0].value; }
+  if (!room.world.includes("/")) {
+    room.world = "/examples/worlds/" + room.world;
+  }
   if (!room.world.endsWith("/")) { room.world += "/"; }
   if (!room.world.startsWith("/")) { room.world = "/" + room.world; }
   room.host.send(exports.parseOSC(

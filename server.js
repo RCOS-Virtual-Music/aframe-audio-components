@@ -38,7 +38,7 @@ require('http').createServer(function (request, response) {
 				let url = request.url.toString().split("?")[0];
 				//console.log(url)
 				// Serve world.html or .js files in the examples directory
-				if (url.startsWith("/examples/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
+				if (url.startsWith("/examples/worlds/") && (url.endsWith("world.html") || url.endsWith(".js"))) {
 					fileServer.serveFile(".." + url, 200, {}, request, response);
 					return;
 				}
