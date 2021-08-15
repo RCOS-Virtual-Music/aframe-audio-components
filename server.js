@@ -15,7 +15,7 @@ const http = require("http"),
 	WebSocket = require("ws");
 
 // We use these strings a lot
-const HOSTS = utils.getIPAddresses(),
+const HOSTS = [utils.getIPAddresses()[0]],
 	PORT = 80;
 
 //
