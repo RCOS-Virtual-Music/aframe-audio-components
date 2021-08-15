@@ -14,10 +14,11 @@ exports.getIPAddresses = function () {
   console.log(interfaces)
   for (var deviceName in interfaces) {
     var addresses = interfaces[deviceName];
+    if (deviceName.startsWith("Local Area Connection")) { continue; } 
     for (var i = 0; i < addresses.length; i++) {
       var addressInfo = addresses[i];
       if (addressInfo.family === "IPv4" && !addressInfo.internal && addressInfo.cidr.endsWith("/24")) {
-          ipAddresses.push(addressInfo.address);
+        ipAddresses.push(addressInfo.address);
       }
     }
   }
