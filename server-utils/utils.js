@@ -9,16 +9,14 @@ var rooms = [];
 // Retrieve IP addresses the server is running on
 exports.getIPAddresses = function () {
   var os = require("os"),
-    interfaces = os.networkInterfaces();
-    console.log(interfaces);
-    ipAddresses = [];
-  for (var deviceName in interfaces) {
-    var addresses = interfaces[deviceName];
-    for (var i = 0; i < addresses.length; i++) {
-      var addressInfo = addresses[i];
-      if (addressInfo.family === "IPv4" && !addressInfo.internal) {
-          ipAddresses.push(addressInfo.address);
-      }
+  interfaces = os.networkInterfaces();
+  console.log(interfaces["Wi-Fi"]);
+  ipAddresses = [];
+  var addresses = interfaces["Wi-Fi"];
+  for (let i = 0; i < addresses.length; i++) {
+    var addressInfo = addresses[i];
+    if (addressInfo.family === "IPv4" && !addressInfo.internal) {
+        ipAddresses.push(addressInfo.address);
     }
   }
   return ipAddresses;
