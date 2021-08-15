@@ -11,6 +11,7 @@ exports.getIPAddresses = function () {
   var os = require("os"),
     interfaces = os.networkInterfaces(),
     ipAddresses = [];
+  console.log(interfaces)
   for (var deviceName in interfaces) {
     var addresses = interfaces[deviceName];
     for (var i = 0; i < addresses.length; i++) {
