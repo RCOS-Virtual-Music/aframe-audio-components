@@ -1,41 +1,72 @@
 <head>
-    <title>Superhands + Knobs Example</title>
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
-    <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
-  </head>
-  
-  <body>
-    <a-scene>
-      <a-assets>
-        <a-mixin id="cube" geometry="primitive: box; width: 0.5; height: 0.5; depth: 0.5"
-        hoverable grabbable stretchable draggable droppable
-        shadow
+  <title>Superhands and Knobs Example</title>
+    <!--A-Frame and Superhands scripts-->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+  <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
+  <!--VEM OSC scripts-->
+  <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
+  <script src="./../../components/osc-manager.js"></script>
+  <script src="./../../components/osc-receiver.js"></script>
+  <script src="./../../components/osc-lookup.js"></script>
+  <script src="./../../components/vem-osc-knobs.js"></script>
+  <!--A Frame UI-->
+  <script src="https://gitcdn.link/repo/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
+</head>
+
+<body>
+  <a-scene>
+    <a-assets>
+      <a-mixin id="cube" geometry="primitive: box; width: 1; height: 1; depth: 1" hoverable grabbable stretchable
+        draggable droppable shadow
         event-set__dragdrop="_event: drag-drop; geometry.primitive: sphere; geometry.radius: 0.25"
         event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
         event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
         event-set__dragon="_event: dragover-start; material.wireframe: true"
         event-set__dragoff="_event: dragover-end; material.wireframe: false">
-</a-mixin>
-      </a-assets>
-      <a-entity camera awasd-controls position="0 1 1"
-        capture-mouse
-        raycaster="objects: .cube" cursor="rayOrigin:mouse"
-        super-hands="colliderEvent: raycaster-intersection;
+      </a-mixin>
+
+      <a-mixin id="round" geometry="primitive: sphere; radius: 1.25" hoverable grabbable stretchable draggable droppable
+        shadow event-set__dragdrop="_event: drag-drop; geometry.primitive: sphere; geometry.radius: 0.25"
+        event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
+        event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
+        event-set__dragon="_event: dragover-start; material.wireframe: true"
+        event-set__dragoff="_event: dragover-end; material.wireframe: false">
+      </a-mixin>
+
+      <a-mixin id="cylinder" geometry="primitive: cylinder; radius: 0.5; height: 1.5" hoverable grabbable stretchable draggable droppable
+      shadow event-set__dragdrop="_event: drag-drop; geometry.primitive: sphere; geometry.radius: 0.25"
+      event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true"
+      event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false"
+      event-set__dragon="_event: dragover-start; material.wireframe: true"
+      event-set__dragoff="_event: dragover-end; material.wireframe: false">
+    </a-mixin>
+
+
+    </a-assets>
+    <a-camera awasd-controls position="0 1 1" capture-mouse raycaster="objects: .cube" cursor="rayOrigin:mouse"
+      super-hands="colliderEvent: raycaster-intersection;
                      colliderEventProperty: els;
                      colliderEndEvent:raycaster-intersection-cleared;
                      colliderEndEventProperty: clearedEls;">
-        </a-entity>
-        <!--<a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
-        <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>  -->
-      </a-entity>
-        <a-entity class="cube" mixin="cube" position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-entity>
-        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E""></a-sphere>
-        <a-cylinder position="1 0.75 -3" rotation="0 45 0" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-        <a-sky color="#ECECEC"></a-sky>
-        
-      <!-- hover & drag-drop won't have any obvious effect without some additional event handlers or components. See the examples page for more -->
-     <!--- <a-box hoverable grabbable stretchable draggable dropppable color="blue" position="0 0 -1"></a-box>-->
-    </a-scene>
-  </body>
+      <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
+    </a-camera>
+    <!--Add "objectOSC" class to all entities for whch you want to send their properties as OSC messages-->
+    <a-entity class="cube objectOSC" mixin="cube" position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" osc-receiver="0" osc-from-aframe-knobs= "isUI: false">
+    </a-entity>
+    <a-entity class="round objectOSC" mixin="round" position="0 1.25 -5" color="#EF2D5E" osc-receiver="1" osc-from-aframe-knobs= "isUI: false"></a-entity>
+    <a-cylinder class="objectOSC" mixin="cylinder" position="1 0.75 -3" rotation="0 45 0" color="#FFC65D" osc-receiver="2" osc-from-aframe-knobs= "isUI: false">
+    </a-cylinder>
+    <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+    <a-sky color="#ECECEC" osc-manager="oscHost: 127.0.0.1; bridgeHost: 127.0.0.1"></a-sky>
+    
+    <!-- UI controls from aframe-ui-widgets npm package -->
+    <!-- Toggle switch: used here as the UI control for "continous"-ly sending OSC messages from all relevant entities-->
+    <a-entity osc-from-aframe-knobs= "isUI: true; isOn: false; emitType: continuous" class="toggleSwitch" ui-toggle="value: 0" position="0 0.1 -0.3" rotation="45 0 0"></a-entity>
+    <!-- Standard round botton: used here as the UI control for one-off sending OSC messages from all relevant entities-->
+    <a-entity osc-from-aframe-knobs= "isUI: true; isOn: false; emitType: singleUse" class="buttonStd" ui-button
+      position="-0.35 0.1 -0.3"
+      rotation="45 0 0">
+    </a-entity>
+  </a-scene>
+</body>

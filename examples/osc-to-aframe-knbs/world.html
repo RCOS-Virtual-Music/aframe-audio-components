@@ -5,7 +5,6 @@
     <title>Hello, World! - A-Frame</title>
     <meta name="description" content="Hello, World! - A-Frame" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <!-- <script src="./test_script.js"></script> -->
     <script src="http://127.0.0.1:8081/socket.io/socket.io.js"></script>
     <script src="./../../components/osc-manager.js?v=2"></script>
     <script src="./../../components/osc-receiver.js?v=2"></script>
@@ -13,11 +12,7 @@
     <script src="./../../components/vem-osc-knobs.js"></script>
     <!--A Frame UI-->
     <script src="https://gitcdn.link/repo/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
-    <!--Superhands-->
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
-    <script src="https://unpkg.com/super-hands@^3.0.1/dist/super-hands.min.js"></script>
-</head>
+  </head>
   <body>
     <a-scene>
       <a-assets>
@@ -36,18 +31,13 @@
         <a-mixin id="yellow" material="color: #FFF88E;"></a-mixin>
         <a-mixin id="offset" position="0 0.01 0"></a-mixin>
       </a-assets>
-      <a-entity>
-        <a-camera>
-            <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
-          </a-camera>
-        <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: left"></a-entity>
-        <a-entity sphere-collider="objects: a-box" super-hands hand-controls="hand: right"></a-entity>
-      </a-entity>
-      
+      <a-camera>
+        <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
+      </a-camera>
       <!--UI CONTROLS-->
       <!-- Button, custom styles -->
       <a-entity
-        vem-osc-knobs="on: false; isUI: true"
+        osc-to-aframe-knobs="on: false; isUI: true"
         id="cubeControl"
         class="buttonCustom"
         ui-button="value: 0; base: beveled-square, blue; top: square, darkgreen; pressed: yellow, offset"
@@ -57,7 +47,7 @@
 
       <!-- Buttons, uses default styles -->
       <a-entity
-        vem-osc-knobs="on: false; isUI: true"
+        osc-to-aframe-knobs="on: false; isUI: true"
         id="sphereControl"
         class="buttonStd"
         ui-button
@@ -65,7 +55,7 @@
         rotation="45 0 0"
       ></a-entity>
       <a-entity
-        vem-osc-knobs="on: false; isUI: true"
+        osc-to-aframe-knobs="on: false; isUI: true"
         id="allControl"
         class="buttonStd"
         ui-button
@@ -74,7 +64,7 @@
       ></a-entity>
       <!-- Toggle Switch -->
       <a-entity
-        vem-osc-knobs="on: false; isUI: true"
+        osc-to-aframe-knobs="on: false; isUI: true"
         id="cylinderControl"
         class="toggleSwitch"
         ui-toggle="value: 0"
@@ -82,34 +72,24 @@
         rotation="45 0 0"
       ></a-entity>
 
-      <!-- Slider: does not work -->
-      <!-- <a-entity vem-osc-knobs="on: false, isUI: true" id = "valueSlider" class="valueSlider" ui-slider="min: 1; max: 10; value: 5" position="0 0 0"></a-entity> -->
-
-      <!-- Rotary Knob: does not work -->
-      <!-- <a-entity vem-osc-knobs="on: false, isUI: true"  id="rotaryKnob" ui-rotary position="0 0.1 -0.3" rotation="45 0 0"></a-entity>
-           -->
-
       <!--GEOMETRIES-->
       <a-box
-        vem-osc-knobs="on: false; isUI: false"
+        osc-to-aframe-knobs="on: false; isUI: false"
         position="-1 0.5 -3"
         rotation="0 45 0"
-        hoverable grabbable stretchable draggable dropppable
         color="#4CC3D9"
         osc-receiver="0"
         animation="property: components.material.material.color; type: color; from: blue; to: red; dur: 5000;  begin: click"
       ></a-box>
       <a-sphere
-        vem-osc-knobs="on: false; isUI: false"
-        vem-osc-knobs="on: false; isUI: false"
+        osc-to-aframe-knobs="on: false; isUI: false"
         position="0 1.25 -5"
         radius="1.25"
         color="#EF2D5E"
         osc-receiver="1"
       ></a-sphere>
       <a-cylinder
-        vem-osc-knobs="on: false; isUI: false"
-        vem-osc-knobs="on: false; isUI: false"
+        osc-to-aframe-knobss="on: false; isUI: false"
         position="1 0.75 -3"
         rotation="0 45 0"
         radius="0.5"
