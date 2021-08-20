@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello, World! - A-Frame</title>
+    <meta name="description" content="Hello, World! - A-Frame" />
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- <script src="./test_script.js"></script> -->
+    <script src="node_modules/osc/dist/osc-browser.min.js"></script>
+    <script src="./../../../components/osc-manager.js"></script>
+    <script src="./../../../components/osc-receiver.js"></script>
+    <script src="./../../../components/osc-lookup.js"></script>
+    <script src="./../../../components/osc-decoder.js"></script>
+    <script src="./../../../components/vem-osc-knobs.js"></script>
+    <!--A Frame UI-->
+    <script src="https://gitcdn.link/repo/caseyyee/aframe-ui-widgets/master/dist/aframe-ui-widgets.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-mixin
+          id="beveled-square"
+          geometry="primitive: cone; radiusTop: 0.15; radiusBottom: 0.19; height: 0.02; segmentsRadial: 4; segmentsHeight: 1"
+          rotation="0 45 0"
+        ></a-mixin>
+        <a-mixin
+          id="square"
+          geometry="primitive: box; width: 0.18; height: 0.025; depth: 0.18;"
+          position="0 0.02 0"
+        ></a-mixin>
+        <a-mixin id="blue" material="color: #1E2768;"></a-mixin>
+        <a-mixin id="darkgreen" material="color: #22FF90;"></a-mixin>
+        <a-mixin id="yellow" material="color: #FFF88E;"></a-mixin>
+        <a-mixin id="offset" position="0 0.01 0"></a-mixin>
+      </a-assets>
+      <a-camera>
+        <a-cursor color="#FFC65D" position="0 0 -1"></a-cursor>
+      </a-camera>
+      <!--UI CONTROLS-->
+      <!-- Button, custom styles -->
+      <a-entity
+        osc-to-aframe-knobs="on: false; isUI: true"
+        id="cubeControl"
+        class="buttonCustom"
+        ui-button="value: 0; base: beveled-square, blue; top: square, darkgreen; pressed: yellow, offset"
+        position="-0.7 0.1 -0.3"
+        rotation="45 0 0"
+      ></a-entity>
+
+      <!-- Buttons, uses default styles -->
+      <a-entity
+        osc-to-aframe-knobs="on: false; isUI: true"
+        id="sphereControl"
+        class="buttonStd"
+        ui-button
+        position="-0.35 0.1 -0.3"
+        rotation="45 0 0"
+      ></a-entity>
+      <a-entity
+        osc-to-aframe-knobs="on: false; isUI: true"
+        id="allControl"
+        class="buttonStd"
+        ui-button
+        position="-0.35 0 0"
+        rotation="45 0 0"
+      ></a-entity>
+      <!-- Toggle Switch -->
+      <a-entity
+        osc-to-aframe-knobs="on: false; isUI: true"
+        id="cylinderControl"
+        class="toggleSwitch"
+        ui-toggle="value: 0"
+        position="0 0.1 -0.3"
+        rotation="45 0 0"
+      ></a-entity>
+
+      <!--GEOMETRIES-->
+      <a-box
+        osc-to-aframe-knobs="on: false; isUI: false"
+        position="-1 0.5 -3"
+        rotation="0 45 0"
+        color="#4CC3D9"
+        osc-receiver="0"
+        animation="property: components.material.material.color; type: color; from: blue; to: red; dur: 5000;  begin: click"
+      ></a-box>
+      <a-sphere
+        osc-to-aframe-knobs="on: false; isUI: false"
+        position="0 1.25 -5"
+        radius="1.25"
+        color="#EF2D5E"
+        osc-receiver="1"
+      ></a-sphere>
+      <a-cylinder
+        osc-to-aframe-knobss="on: false; isUI: false"
+        position="1 0.75 -3"
+        rotation="0 45 0"
+        radius="0.5"
+        height="1.5"
+        color="#FFC65D"
+        osc-receiver="2"
+      ></a-cylinder>
+      <a-plane
+        position="0 0 -4"
+        rotation="-90 0 0"
+        width="4"
+        height="4"
+        color="#7BC8A4"
+      ></a-plane>
+      <a-sky
+        color="#33333"
+        osc-manager="oscHost: 127.0.0.1; bridgeHost: 127.0.0.1"
+      ></a-sky>
+    </a-scene>
+  </body>
+</html>
