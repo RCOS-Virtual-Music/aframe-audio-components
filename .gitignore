@@ -18,7 +18,3 @@ logs
 *.DS_Store
 .DS_Store
 *.sw*
-
-# Temp files
-temp.*
-tmp.*
