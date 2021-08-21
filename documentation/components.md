@@ -148,3 +148,33 @@ Spawns new 3D models into the world space
 | id |  | 0 |
 
 #### Dependencies
+
+## osc-from-aframe-knobs
+Sends entity values as OSC messages to machine and client side music software upon clicks to other
+UI controls (called "knobs" here) in the scene.
+
+#### Example
+Add these as HTML-style attributes to your A-Frame scene's HTML file.
+
+	// for entities for which you want their property values to be sent as OSC messages:
+	osc-from-aframe-knobs= "isUI: false"></a-entity>
+	
+	// for UI controls: continuously send OSC after click
+	osc-from-aframe-knobs= "isUI: true; isOn: false; emitType: continuous" 
+	
+	// for UI controls: send OSC once upon click
+	osc-from-aframe-knobs= "isUI: true; isOn: false; emitType: singleUse" 
+	
+## osc-to-aframe-knobs
+Sends OSC messages that update entity property values upon clicks to UI controls in the scene.
+
+#### Example
+Add these as HTML-style attributes to your A-Frame scene's HTML file.
+
+	// for entities to which you want their property values to be updated from OSC messages:
+	osc-to-aframe-knobs="on: false; isUI: false"
+	
+	// for UI controls: add an id descrbing which entity/entiities it controls (can change in the osc-to-aframe-knobs.js component file) 
+	osc-to-aframe-knobs="on: false; isUI: true"
+        id="cubeControl"
+
